@@ -27,6 +27,7 @@ jobs:
       - uses: actions/setup-java@v3
         with:
           java-version: '19'
+          distribution: 'coretto'
       - name: Publish package
         run: mvn --batch-mode deploy
         env:
