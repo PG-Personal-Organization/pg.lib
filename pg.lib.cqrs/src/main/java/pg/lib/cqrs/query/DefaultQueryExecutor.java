@@ -1,26 +1,38 @@
 package pg.lib.cqrs.query;
 
-import lombok.AllArgsConstructor;
 import pg.lib.cqrs.exception.QueryHandlerNotFoundException;
+import pg.lib.cqrs.util.ClassUtils;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
-@AllArgsConstructor
+import static java.util.Objects.isNull;
+
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class DefaultQueryExecutor implements QueryExecutor {
 
-    private final List<QueryHandler<Query<?>, ?>> queryHandlers;
+    private final Map<Class<?>, QueryHandler> queryHandlers;
 
-    public <T> T execute(final Query<T> query) throws QueryHandlerNotFoundException {
+    public DefaultQueryExecutor(final Collection<QueryHandler> queryHandlers) {
+        this.queryHandlers = new HashMap<>();
+        queryHandlers.forEach(this::addQueryHandler);
+    }
 
-//        Optional<QueryHandler<Query<T>, T>> queryHandler = queryHandlers.stream()
-//                .filter(handler -> handler.getClass().getGenericSuperclass().)
-//                .findFirst();
-//
-//        if (queryHandler.isEmpty())
-//            throw new QueryHandlerNotFoundException(String.format("Command Handler for Command: %s - not found", query.getClass()));
-//
-//        return queryHandler.get().handle(query);
+    @Override
+    public <QueryResult, QueryType extends Query<QueryResult>>
+    QueryResult execute(QueryType query) throws QueryHandlerNotFoundException {
 
-        return null;
+        final QueryHandler<QueryType, QueryResult> queryHandler = queryHandlers.get(query.getClass());
+
+        if (isNull(queryHandler)) {
+            throw new QueryHandlerNotFoundException("Query Handler for Query: %s - not found".formatted(query.getClass()));
+        }
+
+        return queryHandler.handle(query);
+    }
+
+    private void addQueryHandler(final QueryHandler handler) {
+        this.queryHandlers.put(ClassUtils.findInterfaceParameterType(handler.getClass(), QueryHandler.class, 0), handler);
     }
 }

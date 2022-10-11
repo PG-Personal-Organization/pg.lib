@@ -1,5 +1,5 @@
 package pg.lib.cqrs.command;
 
-public interface CommandHandler<Command, CommandResult> {
-    CommandResult handle(final Command command);
+public interface CommandHandler<CommandType extends Command<CommandResult>, CommandResult> {
+    CommandResult handle(final CommandType command);
 }

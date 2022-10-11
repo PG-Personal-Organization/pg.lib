@@ -1,5 +1,5 @@
 package pg.lib.cqrs.query;
 
-public interface QueryHandler<Query, QueryResult> {
-    QueryResult handle(final Query query);
+public interface QueryHandler<QueryType extends Query<QueryResult>, QueryResult> {
+    QueryResult handle(final QueryType query);
 }
