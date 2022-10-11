@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -91,7 +90,7 @@ public class FileService implements IFileService {
         return fileEntities
                 .stream()
                 .map(fileEntity -> awsUrl + fileEntity.getFileName())
-                .collect(Collectors.toList());
+                .toList();
 
     }
 
