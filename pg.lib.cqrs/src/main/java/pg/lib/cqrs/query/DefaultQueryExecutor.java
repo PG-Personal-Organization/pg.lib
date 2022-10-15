@@ -1,6 +1,7 @@
 package pg.lib.cqrs.query;
 
 import lombok.extern.slf4j.Slf4j;
+
 import pg.lib.cqrs.exception.QueryHandlerNotFoundException;
 import pg.lib.cqrs.util.ClassUtils;
 
@@ -19,15 +20,16 @@ public class DefaultQueryExecutor implements QueryExecutor {
     public DefaultQueryExecutor(final Collection<QueryHandler> queryHandlers) {
         this.queryHandlers = new HashMap<>();
 
-        log.info("------------------ Registering found QueryHandler beans --------------------------\n");
-        queryHandlers.forEach(this::addQueryHandler);
-        log.info("------------------ Registering QueryHandlers completed  --------------------------");
+        if (!queryHandlers.isEmpty()) {
+            log.info("------------------ Registering found QueryHandler beans --------------------------\n");
+            queryHandlers.forEach(this::addQueryHandler);
+            log.info("------------------ Registering QueryHandlers completed  --------------------------");
+        }
     }
 
     @Override
     public <QueryResult, QueryType extends Query<QueryResult>>
     QueryResult execute(QueryType query) throws QueryHandlerNotFoundException {
-
         final QueryHandler<QueryType, QueryResult> queryHandler = queryHandlers.get(query.getClass());
 
         if (isNull(queryHandler)) {

@@ -1,6 +1,7 @@
 package pg.lib.cqrs.command;
 
 import lombok.extern.slf4j.Slf4j;
+
 import pg.lib.cqrs.exception.CommandHandlerNotFoundException;
 import pg.lib.cqrs.util.ClassUtils;
 
@@ -18,9 +19,11 @@ public class DefaultCommandExecutor implements CommandExecutor {
     public DefaultCommandExecutor(final Collection<CommandHandler> commandHandlers) {
         this.commandHandlers = new HashMap<>();
 
-        log.info("------------------ Registering found CommandHandler beans --------------------------\n");
-        commandHandlers.forEach(this::addCommandHandler);
-        log.info("------------------ Registering CommandHandlers completed  --------------------------");
+        if (!commandHandlers.isEmpty()) {
+            log.info("------------------ Registering found CommandHandler beans --------------------------\n");
+            commandHandlers.forEach(this::addCommandHandler);
+            log.info("------------------ Registering CommandHandlers completed  --------------------------");
+        }
     }
 
     @Override
