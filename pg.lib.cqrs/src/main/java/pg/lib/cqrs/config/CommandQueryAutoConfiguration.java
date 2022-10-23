@@ -2,18 +2,20 @@ package pg.lib.cqrs.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
 import pg.lib.cqrs.command.CommandExecutor;
 import pg.lib.cqrs.command.CommandHandler;
 import pg.lib.cqrs.command.DefaultCommandExecutor;
 import pg.lib.cqrs.query.DefaultQueryExecutor;
 import pg.lib.cqrs.query.QueryExecutor;
 import pg.lib.cqrs.query.QueryHandler;
+import pg.lib.cqrs.service.DefaultServiceExecutor;
+import pg.lib.cqrs.service.ServiceExecutor;
 
 import java.util.List;
 
 @Configuration
 public class CommandQueryAutoConfiguration {
-
     @Bean
     @SuppressWarnings("rawtypes")
     CommandExecutor commandExecutor(final List<CommandHandler> commandHandlers) {
@@ -26,4 +28,8 @@ public class CommandQueryAutoConfiguration {
         return new DefaultQueryExecutor(queryHandlers);
     }
 
+    @Bean
+    ServiceExecutor serviceExecutor(final CommandExecutor commandExecutor, final QueryExecutor queryExecutor) {
+        return new DefaultServiceExecutor(queryExecutor, commandExecutor);
+    }
 }

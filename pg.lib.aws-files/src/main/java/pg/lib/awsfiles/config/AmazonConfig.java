@@ -18,7 +18,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @ConfigurationProperties(prefix = "aws")
 @EntityScan("pg.lib.awsfiles.entity")
 @EnableJpaRepositories("pg.lib.awsfiles.repository")
-@ComponentScan("pg.lib.awsfiles.service")
+@ComponentScan("pg.lib.awsfiles")
 public class AmazonConfig {
 
     public final String bucketName;

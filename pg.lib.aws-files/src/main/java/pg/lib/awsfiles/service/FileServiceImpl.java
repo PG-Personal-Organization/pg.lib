@@ -1,5 +1,6 @@
 package pg.lib.awsfiles.service;
 
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 import com.amazonaws.services.s3.AmazonS3;
@@ -17,6 +18,7 @@ import pg.lib.awsfiles.repository.FileRepository;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -47,10 +49,30 @@ public class FileServiceImpl implements FileService {
         return "File with id " + fileId + " doesn't exists in database";
     }
 
-    public UUID uploadFile(final MultipartFile file) {
+    private static void validateFile(MultipartFile file) {
         if (file.getSize() > ONE_MB) {
             throw new ResponseStatusException(HttpStatus.PAYLOAD_TOO_LARGE, FILE_IS_TO_BIG);
         }
+    }
+
+    public Optional<FileEntity> findById(final @NonNull UUID fileId) {
+        return fileRepository.findById(fileId);
+    }
+
+    public UUID initFile(final @NonNull MultipartFile file) {
+        validateFile(file);
+
+        String fileName = file.getName();
+
+        if (!fileRepository.existsByFileName(fileName)) {
+            FileEntity fileEntity = saveNewFile(file, fileName);
+            return fileEntity.getFileId();
+        }
+        return fileRepository.getByFileName(fileName).getFileId();
+    }
+
+    public UUID uploadFile(final MultipartFile file) {
+        validateFile(file);
 
         String extension = Objects.requireNonNull(file.getOriginalFilename()).split("\\.")[1];
         String fileName = UUID.randomUUID().toString();
@@ -59,22 +81,26 @@ public class FileServiceImpl implements FileService {
         if (fileRepository.existsByFileName(concatedFileName))
             return fileRepository.getByFileName(concatedFileName).getFileId();
 
+        FileEntity newFile = saveNewFile(file, concatedFileName);
+
+        return newFile.getFileId();
+    }
+
+    private FileEntity saveNewFile(final MultipartFile file, final String name) {
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength(file.getSize());
         metadata.setContentType(file.getContentType());
 
         try {
-            s3client.putObject(amazonConfig.bucketName, concatedFileName, file.getInputStream(), metadata);
+            s3client.putObject(amazonConfig.bucketName, name, file.getInputStream(), metadata);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         FileEntity newFile = new FileEntity();
-        newFile.setFileName(concatedFileName);
+        newFile.setFileName(name);
 
-        fileRepository.save(newFile);
-
-        return newFile.getFileId();
+        return fileRepository.save(newFile);
     }
 
     public String getFileUrl(final UUID fileId) {

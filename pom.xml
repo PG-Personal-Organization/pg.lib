@@ -7,7 +7,7 @@
     <groupId>pg.lib</groupId>
     <artifactId>pg.lib</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 
     <modules>
         <module>pg.lib.cqrs</module>
@@ -24,6 +24,7 @@
         <lombok-version>1.18.24</lombok-version>
         <logback-slf4j-version>1.2.11</logback-slf4j-version>
         <aws-lib-version>1.12.315</aws-lib-version>
+        <springdoc-openapi-version>1.6.11</springdoc-openapi-version>
     </properties>
 
     <dependencyManagement>
@@ -35,6 +36,11 @@
                 <version>${spring-boot-version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-ui</artifactId>
+                <version>${springdoc-openapi-version}</version>
             </dependency>
 
             <dependency>
