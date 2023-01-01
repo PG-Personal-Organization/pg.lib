@@ -1,7 +1,10 @@
 package pg.lib.cqrs.config;
 
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 
 import pg.lib.cqrs.command.CommandExecutor;
 import pg.lib.cqrs.command.CommandHandler;
@@ -15,17 +18,20 @@ import pg.lib.cqrs.service.ServiceExecutor;
 import java.util.List;
 
 @Configuration
+@RequiredArgsConstructor
 public class CommandQueryAutoConfiguration {
+    private final Environment env;
+
     @Bean
     @SuppressWarnings("rawtypes")
     CommandExecutor commandExecutor(final List<CommandHandler> commandHandlers) {
-        return new DefaultCommandExecutor(commandHandlers);
+        return new DefaultCommandExecutor(commandHandlers, env);
     }
 
     @Bean
     @SuppressWarnings("rawtypes")
     QueryExecutor queryExecutor(final List<QueryHandler> queryHandlers) {
-        return new DefaultQueryExecutor(queryHandlers);
+        return new DefaultQueryExecutor(queryHandlers, env);
     }
 
     @Bean

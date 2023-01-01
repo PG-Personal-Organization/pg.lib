@@ -2,9 +2,12 @@ package pg.lib.cqrs.query;
 
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.core.env.Environment;
+
 import pg.lib.cqrs.exception.QueryHandlerNotFoundException;
 import pg.lib.cqrs.util.ClassUtils;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,16 +17,18 @@ import static java.util.Objects.isNull;
 @Slf4j
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class DefaultQueryExecutor implements QueryExecutor {
-
     private final Map<Class<?>, QueryHandler> queryHandlers;
+    private final boolean canLog;
 
-    public DefaultQueryExecutor(final Collection<QueryHandler> queryHandlers) {
+    public DefaultQueryExecutor(final Collection<QueryHandler> queryHandlers, final Environment env) {
         this.queryHandlers = new HashMap<>();
 
+        canLog = Arrays.stream(env.getActiveProfiles()).toList().contains("devlocal");
+
         if (!queryHandlers.isEmpty()) {
-            log.info("------------------ Registering found QueryHandler beans --------------------------\n");
+            if (canLog) log.info("------------------ Registering found QueryHandler beans --------------------------\n");
             queryHandlers.forEach(this::addQueryHandler);
-            log.info("------------------ Registering QueryHandlers completed  --------------------------");
+            if (canLog) log.info("------------------ Registering QueryHandlers completed  --------------------------");
         }
     }
 
@@ -40,7 +45,7 @@ public class DefaultQueryExecutor implements QueryExecutor {
     }
 
     private void addQueryHandler(final QueryHandler handler) {
-        log.info("QueryHandler: %s%n".formatted(handler.getClass()));
+        if (canLog) log.info("QueryHandler: %s%n".formatted(handler.getClass()));
         this.queryHandlers.put(ClassUtils.findInterfaceParameterType(handler.getClass(), QueryHandler.class, 0), handler);
     }
 }
