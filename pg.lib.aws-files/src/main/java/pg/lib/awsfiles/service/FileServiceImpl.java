@@ -76,12 +76,12 @@ public class FileServiceImpl implements FileService {
 
         String extension = Objects.requireNonNull(file.getOriginalFilename()).split("\\.")[1];
         String fileName = UUID.randomUUID().toString();
-        String concatedFileName = fileName + "." + extension;
+        String concatFileName = fileName + "." + extension;
 
-        if (fileRepository.existsByFileName(concatedFileName))
-            return fileRepository.getByFileName(concatedFileName).getFileId();
+        if (fileRepository.existsByFileName(concatFileName))
+            return fileRepository.getByFileName(concatFileName).getFileId();
 
-        FileEntity newFile = saveNewFile(file, concatedFileName);
+        FileEntity newFile = saveNewFile(file, concatFileName);
 
         return newFile.getFileId();
     }
@@ -92,9 +92,9 @@ public class FileServiceImpl implements FileService {
         metadata.setContentType(file.getContentType());
 
         try {
-            s3client.putObject(amazonConfig.bucketName, name, file.getInputStream(), metadata);
+            s3client.putObject(amazonConfig.getBucketName(), name, file.getInputStream(), metadata);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getLocalizedMessage());
         }
 
         FileEntity newFile = new FileEntity();
@@ -122,7 +122,7 @@ public class FileServiceImpl implements FileService {
     public void deleteFile(final UUID fileId) {
         FileEntity fileEntity = getFileById(fileId);
 
-        s3client.deleteObject(amazonConfig.bucketName, fileEntity.getFileName());
+        s3client.deleteObject(amazonConfig.getBucketName(), fileEntity.getFileName());
 
         fileRepository.deleteById(fileId);
     }

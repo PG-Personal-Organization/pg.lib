@@ -1,7 +1,7 @@
 package pg.lib.filters.common;
 
 
-import javax.persistence.criteria.*;
+import jakarta.persistence.criteria.*;
 
 import java.time.LocalDateTime;
 
