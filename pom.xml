@@ -6,12 +6,12 @@
 
     <artifactId>pg.lib</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.2</version>
+    <version>1.1.0</version>
 
     <parent>
         <groupId>org.pg</groupId>
         <artifactId>pg-parent</artifactId>
-        <version>1.0.0</version>
+        <version>1.1.0</version>
     </parent>
 
     <modules>
@@ -19,4 +19,22 @@
         <module>pg.lib.aws-files</module>
         <module>pg.lib.filters</module>
     </modules>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-deploy-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>

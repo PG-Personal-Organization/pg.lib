@@ -5,12 +5,12 @@
     <parent>
         <groupId>org.pg</groupId>
         <artifactId>pg.lib</artifactId>
-        <version>1.0.2</version>
+        <version>1.1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>pg.lib.aws-files</artifactId>
-    <version>1.0.2</version>
+    <version>1.1.0</version>
 
     <dependencies>
         <dependency>
@@ -31,7 +31,7 @@
         </dependency>
         <dependency>
             <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-ui</artifactId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
