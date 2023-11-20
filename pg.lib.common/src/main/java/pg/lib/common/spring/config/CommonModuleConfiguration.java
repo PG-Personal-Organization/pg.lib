@@ -32,7 +32,7 @@ public class CommonModuleConfiguration {
      * @return the cors configuration source
      */
     @Bean
-    CorsConfigurationSource corsConfigurationSource() {
+    public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080", "https://localhost:8080"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD"));
@@ -40,6 +40,4 @@ public class CommonModuleConfiguration {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-
-
 }

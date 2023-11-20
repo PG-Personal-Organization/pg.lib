@@ -10,12 +10,19 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>pg.lib.common</artifactId>
-    <version>1.0.0</version>
 
     <dependencies>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springdoc</groupId>
