@@ -18,6 +18,7 @@
         <module>pg.lib.cqrs</module>
         <module>pg.lib.aws-files</module>
         <module>pg.lib.filters</module>
+        <module>pg.lib.common</module>
     </modules>
 
     <build>
