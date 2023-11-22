@@ -18,6 +18,11 @@ import jakarta.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Specifications.
+ *
+ * @param <T> the type parameter
+ */
 @AllArgsConstructor
 @Builder
 @Data
@@ -25,21 +30,43 @@ public class Specifications<T> implements Specification<T>, Cloneable {
     private final List<Criteria> searchCriteriaListAnd;
     private final List<Criteria> searchCriteriaListOr;
 
+    /**
+     * Instantiates a new Specifications.
+     *
+     * @param specifications the specifications
+     */
     public Specifications(final Specifications<T> specifications) {
         this.searchCriteriaListAnd = new ArrayList<>(specifications.searchCriteriaListAnd);
         this.searchCriteriaListOr = new ArrayList<>(specifications.searchCriteriaListOr);
     }
 
+    /**
+     * And specifications.
+     *
+     * @param searchCriteria the search criteria
+     * @return the specifications
+     */
     public Specifications<T> and(final Criteria searchCriteria) {
         searchCriteriaListAnd.add(searchCriteria);
         return this;
     }
 
+    /**
+     * Or specifications.
+     *
+     * @param searchCriteria the search criteria
+     * @return the specifications
+     */
     public Specifications<T> or(final Criteria searchCriteria) {
         searchCriteriaListOr.add(searchCriteria);
         return this;
     }
 
+    /**
+     * Is empty boolean.
+     *
+     * @return the boolean
+     */
     public boolean isEmpty() {
         return searchCriteriaListAnd.isEmpty() && searchCriteriaListOr.isEmpty();
     }

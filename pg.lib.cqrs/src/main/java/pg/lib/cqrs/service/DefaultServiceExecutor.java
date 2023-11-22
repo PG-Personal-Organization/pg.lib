@@ -9,6 +9,9 @@ import pg.lib.cqrs.exception.QueryHandlerNotFoundException;
 import pg.lib.cqrs.query.Query;
 import pg.lib.cqrs.query.QueryExecutor;
 
+/**
+ * The type Default service executor.
+ */
 @AllArgsConstructor
 public class DefaultServiceExecutor implements ServiceExecutor {
     private final QueryExecutor queryExecutor;

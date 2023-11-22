@@ -15,6 +15,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
+/**
+ * The type Amazon config.
+ */
 @Configuration
 @ConfigurationProperties(prefix = "aws")
 @EntityScan("pg.lib.awsfiles.entity")
@@ -30,6 +33,13 @@ public class AmazonConfig {
     private final String secretKey;
     private final AWSCredentials credentials;
 
+    /**
+     * Instantiates a new Amazon config.
+     *
+     * @param bucketName the bucket name
+     * @param accessKey  the access key
+     * @param secretKey  the secret key
+     */
     public AmazonConfig(@Value("${aws.bucket}") String bucketName,
                         @Value("${aws.access}") String accessKey,
                         @Value("${aws.secret}") String secretKey) {
@@ -43,6 +53,11 @@ public class AmazonConfig {
         );
     }
 
+    /**
+     * S 3 client amazon s 3.
+     *
+     * @return the amazon s 3
+     */
     @Bean
     AmazonS3 s3client() {
         return AmazonS3ClientBuilder

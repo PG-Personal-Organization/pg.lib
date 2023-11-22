@@ -10,9 +10,20 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
+/**
+ * The type Class utils.
+ */
 @UtilityClass
 public class ClassUtils {
 
+    /**
+     * Find interface parameter type class.
+     *
+     * @param instanceClass   the instance class
+     * @param classOfInterest the class of interest
+     * @param parameterIndex  the parameter index
+     * @return the class
+     */
     public Class<?> findInterfaceParameterType(Class<?> instanceClass, final Class<?> classOfInterest, final int parameterIndex) {
         final Map<Type, Type> typeMap = new HashMap<>();
         while (!implementInterface(instanceClass, classOfInterest)) {

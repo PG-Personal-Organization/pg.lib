@@ -19,6 +19,9 @@ import pg.lib.cqrs.exception.CommandHandlerNotFoundException;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * The type Commands and command handlers test.
+ */
 @ExtendWith(MockitoExtension.class)
 class CommandsAndCommandHandlersTest {
 
@@ -28,6 +31,9 @@ class CommandsAndCommandHandlersTest {
     @Mock
     private Environment env;
 
+    /**
+     * Init before each.
+     */
     @BeforeEach
     void initBeforeEach() {
         updateUserCommand = UpdateUserCommand.of("NEwName");
@@ -40,6 +46,9 @@ class CommandsAndCommandHandlersTest {
         commandExecutor = new DefaultCommandExecutor(Collections.singleton(userCommandHandler), env);
     }
 
+    /**
+     * Should get proper command handler for command.
+     */
     @Test
     void shouldGetProperCommandHandlerForCommand() {
         var commandResult = commandExecutor.execute(updateUserCommand);
@@ -47,6 +56,9 @@ class CommandsAndCommandHandlersTest {
         Assertions.assertEquals("NEWNAME", commandResult);
     }
 
+    /**
+     * Should throw command handler not found exception.
+     */
     @Test
     void shouldThrowCommandHandlerNotFoundException() {
         Assertions.assertThrows(CommandHandlerNotFoundException.class, () -> commandExecutor.execute(newCommand));

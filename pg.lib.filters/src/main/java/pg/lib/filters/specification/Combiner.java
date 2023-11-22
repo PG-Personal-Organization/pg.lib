@@ -1,5 +1,15 @@
 package pg.lib.filters.specification;
 
+/**
+ * The enum Combiner.
+ */
 public enum Combiner {
-    AND, OR
+    /**
+     * And combiner.
+     */
+    AND,
+    /**
+     * Or combiner.
+     */
+    OR
 }

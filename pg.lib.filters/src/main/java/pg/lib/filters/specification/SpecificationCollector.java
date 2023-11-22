@@ -9,9 +9,19 @@ import pg.lib.filters.common.JunctionType;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * The type Specification collector.
+ */
 @UtilityClass
 public class SpecificationCollector {
 
+    /**
+     * Create specification specification.
+     *
+     * @param <T>                   the type parameter
+     * @param specificationBuilders the specification builders
+     * @return the specification
+     */
     @SuppressWarnings("unchecked")
     public <T> Specification<T> createSpecification(List<SpecificationBuilder> specificationBuilders) {
         final Specification<T>[] finalSpecification = new Specification[1];

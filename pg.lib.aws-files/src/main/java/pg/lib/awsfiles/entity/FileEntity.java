@@ -9,6 +9,9 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.UUID;
 
+/**
+ * The type File entity.
+ */
 @Entity
 @Table(name = "file")
 @Getter

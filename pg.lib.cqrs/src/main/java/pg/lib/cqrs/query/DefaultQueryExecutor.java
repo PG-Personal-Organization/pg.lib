@@ -14,12 +14,21 @@ import java.util.Map;
 
 import static java.util.Objects.isNull;
 
+/**
+ * The type Default query executor.
+ */
 @Slf4j
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class DefaultQueryExecutor implements QueryExecutor {
     private final Map<Class<?>, QueryHandler> queryHandlers;
     private final boolean canLog;
 
+    /**
+     * Instantiates a new Default query executor.
+     *
+     * @param queryHandlers the query handlers
+     * @param env           the env
+     */
     public DefaultQueryExecutor(final Collection<QueryHandler> queryHandlers, final Environment env) {
         this.queryHandlers = new HashMap<>();
 

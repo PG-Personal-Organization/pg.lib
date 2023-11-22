@@ -14,12 +14,21 @@ import java.util.Map;
 
 import static java.util.Objects.isNull;
 
+/**
+ * The type Default command executor.
+ */
 @Slf4j
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class DefaultCommandExecutor implements CommandExecutor {
     private final Map<Class<?>, CommandHandler> commandHandlers;
     private final boolean canLog;
 
+    /**
+     * Instantiates a new Default command executor.
+     *
+     * @param commandHandlers the command handlers
+     * @param env             the env
+     */
     public DefaultCommandExecutor(final Collection<CommandHandler> commandHandlers, final Environment env) {
         this.commandHandlers = new HashMap<>();
 

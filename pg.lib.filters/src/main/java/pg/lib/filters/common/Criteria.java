@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
+/**
+ * The type Criteria.
+ */
 @NoArgsConstructor
 @AllArgsConstructor(staticName = "of")
 @Data

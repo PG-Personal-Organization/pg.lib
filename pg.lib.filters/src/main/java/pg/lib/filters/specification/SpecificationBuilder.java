@@ -9,6 +9,9 @@ import pg.lib.filters.common.JunctionType;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The type Specification builder.
+ */
 @AllArgsConstructor(staticName = "of")
 @Getter
 public class SpecificationBuilder {

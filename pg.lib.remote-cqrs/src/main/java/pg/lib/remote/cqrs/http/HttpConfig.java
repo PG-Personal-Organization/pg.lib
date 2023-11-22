@@ -9,6 +9,9 @@ import java.util.List;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * The type Http config.
+ */
 @Data
 @Configuration
 @ConfigurationProperties(prefix = "remote-cqrs.http")
@@ -16,6 +19,9 @@ public class HttpConfig {
     private List<ModuleUrl> remoteModules = Collections.emptyList();
     private Long timeoutInMillis = 60000L;
 
+    /**
+     * The type Module url.
+     */
     @Data
     @NoArgsConstructor
     public static final class ModuleUrl {

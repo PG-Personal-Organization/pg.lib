@@ -21,6 +21,9 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * The type File service.
+ */
 @Service
 @Slf4j
 public class FileServiceImpl implements FileService {
@@ -32,6 +35,14 @@ public class FileServiceImpl implements FileService {
     private final FileRepository fileRepository;
     private final String awsUrl;
 
+    /**
+     * Instantiates a new File service.
+     *
+     * @param s3client       the s 3 client
+     * @param amazonConfig   the amazon config
+     * @param fileRepository the file repository
+     * @param awsUrl         the aws url
+     */
     public FileServiceImpl(final AmazonS3 s3client,
                            final AmazonConfig amazonConfig,
                            final FileRepository fileRepository,

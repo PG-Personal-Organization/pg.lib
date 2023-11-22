@@ -11,9 +11,18 @@ import pg.lib.remote.cqrs.http.HttpModuleServiceExecutor;
 import java.net.http.HttpClient;
 import java.time.Duration;
 
+/**
+ * The type Remote modules cqrs configuration.
+ */
 @Configuration
 @Import({HttpConfig.class})
 public class RemoteModulesCqrsConfiguration {
+    /**
+     * Http client http client.
+     *
+     * @param httpConfig the http config
+     * @return the http client
+     */
     @Bean
     public HttpClient httpClient(final HttpConfig httpConfig) {
         return HttpClient.newBuilder()
@@ -23,8 +32,16 @@ public class RemoteModulesCqrsConfiguration {
                 .build();
     }
 
+    /**
+     * Remote service executor remote cqrs module service executor.
+     *
+     * @param httpConfig   the http config
+     * @param objectMapper the object mapper
+     * @return the remote cqrs module service executor
+     */
     @Bean
-    public RemoteCqrsModuleServiceExecutor remoteServiceExecutor(final HttpConfig httpConfig, final ObjectMapper objectMapper) {
+    public RemoteCqrsModuleServiceExecutor remoteServiceExecutor(final HttpConfig httpConfig,
+                                                                 final ObjectMapper objectMapper) {
         return new HttpModuleServiceExecutor(httpConfig, httpClient(httpConfig), objectMapper);
     }
 }

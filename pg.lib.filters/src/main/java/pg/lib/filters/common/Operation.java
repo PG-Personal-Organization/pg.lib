@@ -5,8 +5,14 @@ import jakarta.persistence.criteria.*;
 
 import java.time.LocalDateTime;
 
+/**
+ * The enum Operation.
+ */
 public enum Operation {
 
+    /**
+     * The Greater than.
+     */
     GREATER_THAN {
         @Override
         public <T> Predicate getPredicate(final Root<T> root, final Criteria criteria, final CriteriaBuilder builder) {
@@ -17,6 +23,9 @@ public enum Operation {
         }
     },
 
+    /**
+     * The Less than.
+     */
     LESS_THAN {
         @Override
         public <T> Predicate getPredicate(final Root<T> root, final Criteria criteria, final CriteriaBuilder builder) {
@@ -27,6 +36,9 @@ public enum Operation {
         }
     },
 
+    /**
+     * The Greater than equal.
+     */
     GREATER_THAN_EQUAL {
         @Override
         public <T> Predicate getPredicate(final Root<T> root, final Criteria criteria, final CriteriaBuilder builder) {
@@ -37,6 +49,9 @@ public enum Operation {
         }
     },
 
+    /**
+     * The Greater than equal join.
+     */
     GREATER_THAN_EQUAL_JOIN {
         @Override
         public <T> Predicate getPredicate(final Root<T> root, final Criteria criteria, final CriteriaBuilder builder) {
@@ -53,18 +68,9 @@ public enum Operation {
         }
     },
 
-//    GREATER_THAN_EQUAL_IN_MAP {
-//        @Override
-//        public <T> Predicate getPredicate(final Root<T> root, final Criteria criteria, final CriteriaBuilder builder) {
-//            MapJoin<T, ?, ?> map = root.joinMap(criteria.getKey());
-//
-//            return builder.greaterThanOrEqualTo(
-//                    criteria.getValue(),
-//                    map.value()
-//            );
-//        }
-//    },
-
+    /**
+     * The Less than equal.
+     */
     LESS_THAN_EQUAL {
         @Override
         public <T> Predicate getPredicate(final Root<T> root, final Criteria criteria, final CriteriaBuilder builder) {
@@ -75,6 +81,9 @@ public enum Operation {
         }
     },
 
+    /**
+     * The Not equal.
+     */
     NOT_EQUAL {
         @Override
         public <T> Predicate getPredicate(final Root<T> root, final Criteria criteria, final CriteriaBuilder builder) {
@@ -84,6 +93,9 @@ public enum Operation {
         }
     },
 
+    /**
+     * The Equal.
+     */
     EQUAL {
         @Override
         public <T> Predicate getPredicate(final Root<T> root, final Criteria criteria, final CriteriaBuilder builder) {
@@ -92,6 +104,9 @@ public enum Operation {
             );
         }
     },
+    /**
+     * The Equal join.
+     */
     EQUAL_JOIN {
         @Override
         public <T> Predicate getPredicate(final Root<T> root, final Criteria criteria, final CriteriaBuilder builder) {
@@ -108,6 +123,9 @@ public enum Operation {
         }
     },
 
+    /**
+     * The Match join.
+     */
     MATCH_JOIN {
         @Override
         public <T> Predicate getPredicate(final Root<T> root, final Criteria criteria, final CriteriaBuilder builder) {
@@ -121,6 +139,9 @@ public enum Operation {
             );
         }
     },
+    /**
+     * The Match join list.
+     */
     MATCH_JOIN_LIST {
         @Override
         public <T> Predicate getPredicate(final Root<T> root, final Criteria criteria, final CriteriaBuilder builder) {
@@ -135,6 +156,9 @@ public enum Operation {
 
         }
     },
+    /**
+     * The Match join list object.
+     */
     MATCH_JOIN_LIST_OBJECT {
         @Override
         public <T> Predicate getPredicate(final Root<T> root, final Criteria criteria, final CriteriaBuilder builder) {
@@ -151,6 +175,9 @@ public enum Operation {
         }
     },
 
+    /**
+     * The Match.
+     */
     MATCH {
         @Override
         public <T> Predicate getPredicate(final Root<T> root, final Criteria criteria, final CriteriaBuilder builder) {
@@ -161,6 +188,9 @@ public enum Operation {
         }
     },
 
+    /**
+     * The Match start.
+     */
     MATCH_START {
         @Override
         public <T> Predicate getPredicate(final Root<T> root, final Criteria criteria, final CriteriaBuilder builder) {
@@ -171,6 +201,9 @@ public enum Operation {
         }
     },
 
+    /**
+     * The Match end.
+     */
     MATCH_END {
         @Override
         public <T> Predicate getPredicate(final Root<T> root, final Criteria criteria, final CriteriaBuilder builder) {
@@ -181,6 +214,9 @@ public enum Operation {
         }
     },
 
+    /**
+     * The Is member.
+     */
     IS_MEMBER {
         @Override
         public <T> Predicate getPredicate(final Root<T> root, final Criteria criteria, final CriteriaBuilder builder) {
@@ -191,6 +227,9 @@ public enum Operation {
         }
     },
 
+    /**
+     * The In.
+     */
     IN {
         @Override
         public <T> Predicate getPredicate(final Root<T> root, final Criteria criteria, final CriteriaBuilder builder) {
@@ -200,6 +239,9 @@ public enum Operation {
         }
     },
 
+    /**
+     * The Not in.
+     */
     NOT_IN {
         @Override
         public <T> Predicate getPredicate(final Root<T> root, final Criteria criteria, final CriteriaBuilder builder) {
@@ -209,6 +251,9 @@ public enum Operation {
         }
     },
 
+    /**
+     * The Equal null.
+     */
     EQUAL_NULL {
         @Override
         public <T> Predicate getPredicate(final Root<T> root, final Criteria criteria, final CriteriaBuilder builder) {
@@ -216,6 +261,9 @@ public enum Operation {
         }
     },
 
+    /**
+     * The Not equal null.
+     */
     NOT_EQUAL_NULL {
         @Override
         public <T> Predicate getPredicate(final Root<T> root, final Criteria criteria, final CriteriaBuilder builder) {
@@ -223,6 +271,9 @@ public enum Operation {
         }
     },
 
+    /**
+     * The Greater than equal date.
+     */
     GREATER_THAN_EQUAL_DATE {
         @Override
         public <T> Predicate getPredicate(final Root<T> root, final Criteria criteria, final CriteriaBuilder builder) {
@@ -233,6 +284,9 @@ public enum Operation {
         }
     },
 
+    /**
+     * The Greater than date.
+     */
     GREATER_THAN_DATE {
         @Override
         public <T> Predicate getPredicate(final Root<T> root, final Criteria criteria, final CriteriaBuilder builder) {
@@ -242,6 +296,9 @@ public enum Operation {
         }
     },
 
+    /**
+     * The Less than equal date.
+     */
     LESS_THAN_EQUAL_DATE {
         @Override
         public <T> Predicate getPredicate(final Root<T> root, final Criteria criteria, final CriteriaBuilder builder) {
@@ -252,6 +309,9 @@ public enum Operation {
         }
     },
 
+    /**
+     * The Less than date.
+     */
     LESS_THAN_DATE {
         @Override
         public <T> Predicate getPredicate(final Root<T> root, final Criteria criteria, final CriteriaBuilder builder) {
@@ -261,6 +321,9 @@ public enum Operation {
         }
     },
 
+    /**
+     * The Equal date.
+     */
     EQUAL_DATE {
         @Override
         public <T> Predicate getPredicate(final Root<T> root, final Criteria criteria, final CriteriaBuilder builder) {
@@ -270,6 +333,9 @@ public enum Operation {
         }
     },
 
+    /**
+     * The Not equal date.
+     */
     NOT_EQUAL_DATE {
         @Override
         public <T> Predicate getPredicate(final Root<T> root, final Criteria criteria, final CriteriaBuilder builder) {
@@ -279,6 +345,9 @@ public enum Operation {
         }
     },
 
+    /**
+     * The Is empty.
+     */
     IS_EMPTY {
         @Override
         public <T> Predicate getPredicate(final Root<T> root, final Criteria criteria, final CriteriaBuilder builder) {
@@ -286,6 +355,9 @@ public enum Operation {
         }
     },
 
+    /**
+     * The Is not empty.
+     */
     IS_NOT_EMPTY {
         @Override
         public <T> Predicate getPredicate(final Root<T> root, final Criteria criteria, final CriteriaBuilder builder) {
@@ -293,5 +365,14 @@ public enum Operation {
         }
     };
 
+    /**
+     * Gets predicate.
+     *
+     * @param <T>      the type parameter
+     * @param root     the root
+     * @param criteria the criteria
+     * @param builder  the builder
+     * @return the predicate
+     */
     public abstract <T> Predicate getPredicate(final Root<T> root, final Criteria criteria, final CriteriaBuilder builder);
 }
