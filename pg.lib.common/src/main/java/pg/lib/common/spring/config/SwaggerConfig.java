@@ -7,11 +7,15 @@ import io.swagger.v3.oas.models.info.License;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.view.RedirectView;
 
 /**
  * The type Swagger configuration.
  */
 @Configuration
+@RestController
 public class SwaggerConfig {
 
     /**
@@ -71,5 +75,10 @@ public class SwaggerConfig {
                 .externalDocs(new ExternalDocumentation()
                         .description("Simple API Wiki Documentation")
                         .url("https://github.com/PG-Personal-Organization"));
+    }
+
+    @GetMapping("/swagger-ui")
+    public RedirectView redirectView() {
+        return new RedirectView("/swagger-ui.html");
     }
 }
