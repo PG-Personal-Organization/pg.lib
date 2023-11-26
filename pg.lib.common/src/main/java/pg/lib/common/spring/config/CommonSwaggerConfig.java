@@ -16,7 +16,7 @@ import org.springframework.web.servlet.view.RedirectView;
  */
 @Configuration
 @RestController
-public class SwaggerConfig {
+public class CommonSwaggerConfig {
 
     /**
      * Public api grouped open api.
@@ -77,6 +77,11 @@ public class SwaggerConfig {
                         .url("https://github.com/PG-Personal-Organization"));
     }
 
+    /**
+     * Redirect view redirect view.
+     *
+     * @return the redirect view
+     */
     @GetMapping("/swagger-ui")
     public RedirectView redirectView() {
         return new RedirectView("/swagger-ui.html");
