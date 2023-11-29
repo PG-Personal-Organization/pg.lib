@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import pg.lib.common.spring.auth.HeaderAuthenticationFilter;
 import pg.lib.remote.cqrs.executors.RemoteCqrsModuleServiceExecutor;
 import pg.lib.remote.cqrs.http.HttpConfig;
 import pg.lib.remote.cqrs.http.HttpModuleServiceExecutor;
@@ -35,13 +36,15 @@ public class RemoteModulesCqrsConfiguration {
     /**
      * Remote service executor remote cqrs module service executor.
      *
-     * @param httpConfig   the http config
-     * @param objectMapper the object mapper
+     * @param httpConfig           the http config
+     * @param objectMapper         the object mapper
+     * @param authenticationFilter the authentication filter
      * @return the remote cqrs module service executor
      */
     @Bean
     public RemoteCqrsModuleServiceExecutor remoteServiceExecutor(final HttpConfig httpConfig,
-                                                                 final ObjectMapper objectMapper) {
-        return new HttpModuleServiceExecutor(httpConfig, httpClient(httpConfig), objectMapper);
+                                                                 final ObjectMapper objectMapper,
+                                                                 final HeaderAuthenticationFilter authenticationFilter) {
+        return new HttpModuleServiceExecutor(authenticationFilter, httpConfig, httpClient(httpConfig), objectMapper);
     }
 }

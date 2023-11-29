@@ -26,6 +26,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import pg.lib.common.spring.auth.HeaderAuthenticationFilter;
 import pg.lib.common.spring.exception.InvalidRequestCustomizerException;
 import pg.lib.common.spring.exception.MissingValidHeaderAuthenticationFilterException;
+import pg.lib.common.spring.storage.HeadersHolder;
+import pg.lib.common.spring.storage.ThreadLocalHeadersHolder;
 import pg.lib.common.spring.user.Roles;
 
 import java.util.Arrays;
@@ -141,12 +143,22 @@ public class CommonSecurityConfig {
     }
 
     /**
-     * Null authentication provider authentication provider.
+     * Null authentication provider.
      *
      * @return the authentication provider
      */
     @Bean
     public AuthenticationProvider nullAuthenticationProvider() {
         return new AuthenticationManagerBeanDefinitionParser.NullAuthenticationProvider();
+    }
+
+    /**
+     * Thread local header's holder.
+     *
+     * @return the headers holder
+     */
+    @Bean
+    public HeadersHolder threadLocalHeadersHolder() {
+        return new ThreadLocalHeadersHolder();
     }
 }
