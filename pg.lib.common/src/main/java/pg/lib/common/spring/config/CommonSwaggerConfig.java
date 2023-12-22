@@ -78,7 +78,7 @@ public class CommonSwaggerConfig {
     }
 
     /**
-     * Redirect view redirect view.
+     * Redirect view.
      *
      * @return the redirect view
      */
