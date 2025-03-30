@@ -27,6 +27,7 @@ public abstract class HeaderAuthenticationFilter extends OncePerRequestFilter {
      *
      * @param headersHolder the headers holder
      */
+    @SuppressWarnings("checkstyle:HiddenField")
     protected HeaderAuthenticationFilter(final @Lazy @NonNull HeadersHolder headersHolder) {
         this.headersHolder = headersHolder;
     }
@@ -41,10 +42,8 @@ public abstract class HeaderAuthenticationFilter extends OncePerRequestFilter {
      * @throws ServletException the servlet exception
      * @throws IOException      the io exception
      */
-    protected abstract void continueFilter(final HttpServletRequest request,
-                                           final HttpServletResponse response,
-                                           final FilterChain filterChain,
-                                           final String authenticationToken) throws ServletException, IOException;
+    protected abstract void continueFilter(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain,
+                                           String authenticationToken) throws ServletException, IOException;
 
     @Override
     protected void doFilterInternal(final @NonNull HttpServletRequest request,

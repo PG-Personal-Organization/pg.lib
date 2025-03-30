@@ -27,6 +27,7 @@ public class DefaultCommandExecutor implements CommandExecutor {
      * @param commandHandlers the command handlers
      * @param env             the env
      */
+    @SuppressWarnings("checkstyle:HiddenField")
     public DefaultCommandExecutor(final Collection<CommandHandler> commandHandlers, final Environment env) {
         this.commandHandlers = new HashMap<>();
 

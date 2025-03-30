@@ -9,7 +9,7 @@ public class QueryHandlerNotFoundException extends RuntimeException {
      *
      * @param message the message
      */
-    public QueryHandlerNotFoundException(String message) {
+    public QueryHandlerNotFoundException(final String message) {
         super(message);
     }
 }

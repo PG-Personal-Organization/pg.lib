@@ -63,5 +63,6 @@ public interface RemoteCqrsModuleServiceExecutor {
      * @throws MissMatchResponseTypeException the miss match response type exception
      */
     <CommandResult, CommandType extends Command<CommandResult>>
-    CommandResult execute(CommandType command, String module, int version) throws RemoteModuleNotFoundException, MissMatchResponseTypeException;
+    CommandResult execute(CommandType command, String module, int version)
+            throws RemoteModuleNotFoundException, MissMatchResponseTypeException;
 }

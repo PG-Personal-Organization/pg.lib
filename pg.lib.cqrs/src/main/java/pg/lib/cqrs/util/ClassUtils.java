@@ -24,7 +24,8 @@ public class ClassUtils {
      * @param parameterIndex  the parameter index
      * @return the class
      */
-    public static Class<?> findInterfaceParameterType(final Class<?> instanceClass, final Class<?> classOfInterest, final int parameterIndex) {
+    public static Class<?> findInterfaceParameterType(final Class<?> instanceClass, final Class<?> classOfInterest,
+                                                      final int parameterIndex) {
         final Map<Type, Type> typeMap = new HashMap<>();
         Class<?> overriddenType = instanceClass;
         while (!implementInterface(instanceClass, classOfInterest)) {

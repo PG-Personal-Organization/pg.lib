@@ -16,6 +16,8 @@ import java.util.List;
 @ConfigurationProperties(prefix = "remote-cqrs.http")
 public class HttpConfig {
     private List<ModuleUrl> remoteModules = Collections.emptyList();
+
+    @SuppressWarnings("checkstyle:MagicNumber")
     private Long timeoutInMillis = 60000L;
 
     /**

@@ -134,8 +134,8 @@ public enum Operation {
             Join<T, ?> join = root.join(memberAndField[0]);
 
             return builder.like(
-                    builder.lower(join.get(memberAndField[1]))
-                    , "%" + criteria.getValue().toString().toLowerCase() + "%"
+                    builder.lower(join.get(memberAndField[1])),
+                    "%" + criteria.getValue().toString().toLowerCase() + "%"
             );
         }
     },
@@ -150,8 +150,8 @@ public enum Operation {
             ListJoin<T, ?> join = root.joinList(memberAndField[0]);
 
             return builder.like(
-                    builder.lower(join.get(memberAndField[1]))
-                    , "%" + criteria.getValue().toString().toLowerCase() + "%"
+                    builder.lower(join.get(memberAndField[1])),
+                    "%" + criteria.getValue().toString().toLowerCase() + "%"
             );
 
         }
@@ -160,6 +160,7 @@ public enum Operation {
      * The Match join list object.
      */
     MATCH_JOIN_LIST_OBJECT {
+        @SuppressWarnings("checkstyle:MagicNumber")
         @Override
         public <T> Predicate getPredicate(final Root<T> root, final Criteria criteria, final CriteriaBuilder builder) {
             String[] memberAndField = criteria.getKey().split("\\.", 3);
@@ -169,8 +170,8 @@ public enum Operation {
             Join<?, ?> secondJoin = join.join(memberAndField[1]);
 
             return builder.like(
-                    builder.lower(secondJoin.get(memberAndField[2]))
-                    , "%" + criteria.getValue().toString().toLowerCase() + "%"
+                    builder.lower(secondJoin.get(memberAndField[2])),
+                    "%" + criteria.getValue().toString().toLowerCase() + "%"
             );
         }
     },
@@ -182,8 +183,8 @@ public enum Operation {
         @Override
         public <T> Predicate getPredicate(final Root<T> root, final Criteria criteria, final CriteriaBuilder builder) {
             return builder.like(
-                    builder.lower(root.get(criteria.getKey()))
-                    , "%" + criteria.getValue().toString().toLowerCase() + "%"
+                    builder.lower(root.get(criteria.getKey())),
+                    "%" + criteria.getValue().toString().toLowerCase() + "%"
             );
         }
     },
@@ -374,5 +375,5 @@ public enum Operation {
      * @param builder  the builder
      * @return the predicate
      */
-    public abstract <T> Predicate getPredicate(final Root<T> root, final Criteria criteria, final CriteriaBuilder builder);
+    public abstract <T> Predicate getPredicate(Root<T> root, Criteria criteria, CriteriaBuilder builder);
 }

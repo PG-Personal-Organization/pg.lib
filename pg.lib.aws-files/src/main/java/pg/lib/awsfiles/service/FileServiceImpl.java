@@ -41,24 +41,26 @@ public class FileServiceImpl implements FileService {
      * @param fileRepository the file repository
      * @param awsUrl         the aws url
      */
+    @SuppressWarnings("checkstyle:HiddenField")
     public FileServiceImpl(final AmazonS3 s3client,
                            final AmazonConfig amazonConfig,
                            final FileRepository fileRepository,
-                           @Value("${aws.url}") String awsUrl) {
+                           final @Value("${aws.url}") String awsUrl) {
         this.s3client = s3client;
         this.amazonConfig = amazonConfig;
         this.fileRepository = fileRepository;
         this.awsUrl = awsUrl;
 
-        if (awsUrl == null)
+        if (awsUrl == null) {
             log.error("Aws url property is not set");
+        }
     }
 
     private static String notFound(final UUID fileId) {
         return "File with id " + fileId + " doesn't exists in database";
     }
 
-    private static void validateFile(MultipartFile file) {
+    private static void validateFile(final MultipartFile file) {
         if (file.getSize() > ONE_MB) {
             throw new ResponseStatusException(HttpStatus.PAYLOAD_TOO_LARGE, FILE_IS_TO_BIG);
         }
@@ -87,8 +89,9 @@ public class FileServiceImpl implements FileService {
         String fileName = UUID.randomUUID().toString();
         String concatFileName = fileName + "." + extension;
 
-        if (fileRepository.existsByFileName(concatFileName))
+        if (fileRepository.existsByFileName(concatFileName)) {
             return fileRepository.getByFileName(concatFileName).getFileId();
+        }
 
         FileEntity newFile = saveNewFile(file, concatFileName);
 

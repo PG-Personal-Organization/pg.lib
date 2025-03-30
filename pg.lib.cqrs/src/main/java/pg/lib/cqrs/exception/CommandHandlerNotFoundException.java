@@ -9,7 +9,7 @@ public class CommandHandlerNotFoundException extends RuntimeException {
      *
      * @param message the message
      */
-    public CommandHandlerNotFoundException(String message) {
+    public CommandHandlerNotFoundException(final String message) {
         super(message);
     }
 }

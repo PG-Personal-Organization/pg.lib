@@ -70,7 +70,8 @@ public class Specifications<T> implements Specification<T>, Cloneable {
     }
 
     @Override
-    public Predicate toPredicate(final @NonNull Root<T> root, final @Nullable CriteriaQuery<?> query, final @NonNull CriteriaBuilder builder) {
+    public Predicate toPredicate(final @NonNull Root<T> root, final @Nullable CriteriaQuery<?> query,
+                                 final @NonNull CriteriaBuilder builder) {
         Predicate and = builder.and(searchCriteriaListAnd.stream()
                 .map(criteria -> criteria.getOperation().getPredicate(root, criteria, builder))
                 .toList()

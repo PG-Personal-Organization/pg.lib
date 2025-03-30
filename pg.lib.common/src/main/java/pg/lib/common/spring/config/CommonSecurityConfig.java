@@ -38,6 +38,8 @@ import java.util.Collection;
  */
 @Configuration
 public class CommonSecurityConfig {
+    private static final int ENCRYPT_STRENGTH = 8;
+
     /**
      * Method security expression handler method security expression handler.
      *
@@ -58,7 +60,7 @@ public class CommonSecurityConfig {
      */
     @Bean
     public PasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder(8);
+        return new BCryptPasswordEncoder(ENCRYPT_STRENGTH);
     }
 
     /**
@@ -127,9 +129,7 @@ public class CommonSecurityConfig {
                 .addFilterBefore(headerAuthenticationFilter, AnonymousAuthenticationFilter.class)
 
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/", "/actuator/**", "/swagger-ui/**", "/swagger-ui.html**", "/v3/api-docs/**").permitAll())
-
-        ;
+                        .requestMatchers("/", "/actuator/**", "/swagger-ui/**", "/swagger-ui.html**", "/v3/api-docs/**").permitAll());
 
         requestPermits.forEach(permit -> {
             try {

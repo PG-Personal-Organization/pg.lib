@@ -38,8 +38,9 @@ public class HttpModuleServiceExecutor implements RemoteCqrsModuleServiceExecuto
      * @param client        the client
      * @param objectMapper  the object mapper
      */
-    public HttpModuleServiceExecutor(final @Lazy HeaderAuthenticationFilter authenticator, final HttpConfig httpConfig, final HttpClient client,
-                                     final ObjectMapper objectMapper) {
+    @SuppressWarnings("checkstyle:HiddenField")
+    public HttpModuleServiceExecutor(final @Lazy HeaderAuthenticationFilter authenticator, final HttpConfig httpConfig,
+                                     final HttpClient client, final ObjectMapper objectMapper) {
         this.authenticator = authenticator;
         this.httpConfig = httpConfig;
         this.client = client;
@@ -59,7 +60,7 @@ public class HttpModuleServiceExecutor implements RemoteCqrsModuleServiceExecuto
     @Override
     @SneakyThrows
     public <QueryResult, QueryType extends Query<QueryResult>> QueryResult
-    execute(QueryType query, String module, int version) {
+    execute(final QueryType query, final String module, final int version) {
         var request = prepareRequest(query, module, version);
         var response = executeRequest(request);
         var clazz = provideQueryReturnClass(query.getClass());
@@ -79,7 +80,7 @@ public class HttpModuleServiceExecutor implements RemoteCqrsModuleServiceExecuto
     @Override
     @SneakyThrows
     public <CommandResult, CommandType extends Command<CommandResult>> CommandResult
-    execute(CommandType command, String module, int version) {
+    execute(final CommandType command, final String module, final int version) {
         var request = prepareRequest(command, module, version);
         var response = executeRequest(request);
         var clazz = provideCommandReturnClass(command.getClass());

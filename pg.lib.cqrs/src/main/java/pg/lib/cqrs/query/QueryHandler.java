@@ -13,5 +13,5 @@ public interface QueryHandler<QueryType extends Query<QueryResult>, QueryResult>
      * @param query the query
      * @return the query result
      */
-    QueryResult handle(final QueryType query);
+    QueryResult handle(QueryType query);
 }

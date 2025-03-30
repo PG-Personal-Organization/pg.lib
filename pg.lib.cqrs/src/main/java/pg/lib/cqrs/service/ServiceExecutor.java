@@ -18,7 +18,8 @@ public interface ServiceExecutor {
      * @return the command result
      * @throws CommandHandlerNotFoundException the command handler not found exception
      */
-    <CommandResult, CommandType extends Command<CommandResult>> CommandResult executeCommand(CommandType command) throws CommandHandlerNotFoundException;
+    <CommandResult, CommandType extends Command<CommandResult>> CommandResult executeCommand(CommandType command)
+            throws CommandHandlerNotFoundException;
 
     /**
      * Execute query query result.

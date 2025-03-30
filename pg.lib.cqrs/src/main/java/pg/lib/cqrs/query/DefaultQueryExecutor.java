@@ -27,6 +27,7 @@ public class DefaultQueryExecutor implements QueryExecutor {
      * @param queryHandlers the query handlers
      * @param env           the env
      */
+    @SuppressWarnings("checkstyle:HiddenField")
     public DefaultQueryExecutor(final Collection<QueryHandler> queryHandlers, final Environment env) {
         this.queryHandlers = new HashMap<>();
 

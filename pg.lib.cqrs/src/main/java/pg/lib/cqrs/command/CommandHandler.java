@@ -13,5 +13,5 @@ public interface CommandHandler<CommandType extends Command<CommandResult>, Comm
      * @param command the command
      * @return the command result
      */
-    CommandResult handle(final CommandType command);
+    CommandResult handle(CommandType command);
 }

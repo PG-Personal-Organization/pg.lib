@@ -21,7 +21,7 @@ public class SpecificationCollector {
      * @return the specification
      */
     @SuppressWarnings("unchecked")
-    public <T> Specification<T> createSpecification(List<SpecificationBuilder> specificationBuilders) {
+    public <T> Specification<T> createSpecification(final List<SpecificationBuilder> specificationBuilders) {
         final Specification<T>[] finalSpecification = new Specification[1];
 
         specificationBuilders.forEach(builder -> {
@@ -30,12 +30,14 @@ public class SpecificationCollector {
                     .searchCriteriaListOr(builder.getFilterScheme().getOrDefault(JunctionType.OR, Collections.emptyList()))
                     .build();
 
-            if (finalSpecification[0] != null)
+            if (finalSpecification[0] != null) {
                 finalSpecification[0] = builder.getCombiner().equals(Combiner.AND) ? finalSpecification[0].and(specification)
                         : finalSpecification[0].or(specification);
+            }
 
-            if (finalSpecification[0] == null)
+            if (finalSpecification[0] == null) {
                 finalSpecification[0] = specification;
+            }
 
         });
 

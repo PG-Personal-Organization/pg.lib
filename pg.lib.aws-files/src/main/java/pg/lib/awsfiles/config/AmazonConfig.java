@@ -40,9 +40,10 @@ public class AmazonConfig {
      * @param accessKey  the access key
      * @param secretKey  the secret key
      */
-    public AmazonConfig(@Value("${aws.bucket}") String bucketName,
-                        @Value("${aws.access}") String accessKey,
-                        @Value("${aws.secret}") String secretKey) {
+    @SuppressWarnings("checkstyle:HiddenField")
+    public AmazonConfig(final @Value("${aws.bucket}") String bucketName,
+                        final @Value("${aws.access}") String accessKey,
+                        final @Value("${aws.secret}") String secretKey) {
         this.bucketName = bucketName;
         this.accessKey = accessKey;
         this.secretKey = secretKey;

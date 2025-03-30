@@ -17,12 +17,14 @@ public class DefaultServiceExecutor implements ServiceExecutor {
     private final CommandExecutor commandExecutor;
 
     @Override
-    public <CommandResult, CommandType extends Command<CommandResult>> CommandResult executeCommand(final CommandType command) throws CommandHandlerNotFoundException {
+    public <CommandResult, CommandType extends Command<CommandResult>> CommandResult executeCommand(final CommandType command)
+            throws CommandHandlerNotFoundException {
         return commandExecutor.execute(command);
     }
 
     @Override
-    public <QueryResult, QueryType extends Query<QueryResult>> QueryResult executeQuery(final QueryType query) throws QueryHandlerNotFoundException {
+    public <QueryResult, QueryType extends Query<QueryResult>> QueryResult executeQuery(final QueryType query)
+            throws QueryHandlerNotFoundException {
         return queryExecutor.execute(query);
     }
 }
