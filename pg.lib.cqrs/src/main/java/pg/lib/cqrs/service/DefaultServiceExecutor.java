@@ -1,7 +1,6 @@
 package pg.lib.cqrs.service;
 
 import lombok.AllArgsConstructor;
-
 import pg.lib.cqrs.command.Command;
 import pg.lib.cqrs.command.CommandExecutor;
 import pg.lib.cqrs.exception.CommandHandlerNotFoundException;

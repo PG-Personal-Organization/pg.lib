@@ -4,14 +4,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>pg.lib</artifactId>
+    <artifactId>lib</artifactId>
     <packaging>pom</packaging>
-    <version>1.4.0</version>
+    <version>1.5.0</version>
 
     <parent>
         <groupId>org.pg</groupId>
-        <artifactId>pg-parent</artifactId>
-        <version>1.1.0</version>
+        <artifactId>parent</artifactId>
+        <version>1.3.0</version>
     </parent>
 
     <modules>
@@ -22,32 +22,34 @@
         <module>pg.lib.remote-cqrs</module>
     </modules>
 
+    <name>pg.lib</name>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>org.pg</groupId>
                 <artifactId>pg.lib.filters</artifactId>
-                <version>${version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.pg</groupId>
                 <artifactId>pg.lib.aws-files</artifactId>
-                <version>${version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.pg</groupId>
                 <artifactId>pg.lib.cqrs</artifactId>
-                <version>${version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.pg</groupId>
                 <artifactId>pg.lib.remote-cqrs</artifactId>
-                <version>${version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.pg</groupId>
                 <artifactId>pg.lib.common</artifactId>
-                <version>${version}</version>
+                <version>${project.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

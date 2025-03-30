@@ -1,9 +1,7 @@
 package pg.lib.filters.specification;
 
 import lombok.experimental.UtilityClass;
-
 import org.springframework.data.jpa.domain.Specification;
-
 import pg.lib.filters.common.JunctionType;
 
 import java.util.Collections;

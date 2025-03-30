@@ -1,16 +1,14 @@
 package pg.lib.awsfiles.service;
 
-import lombok.NonNull;
-import lombok.extern.slf4j.Slf4j;
-
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import lombok.NonNull;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
-
 import pg.lib.awsfiles.config.AmazonConfig;
 import pg.lib.awsfiles.entity.FileEntity;
 import pg.lib.awsfiles.repository.FileRepository;
@@ -25,7 +23,7 @@ import java.util.UUID;
  * The type File service.
  */
 @Service
-@Slf4j
+@Log4j2
 public class FileServiceImpl implements FileService {
     private static final Integer ONE_MB = 1_050_000;
     private static final String FILE_IS_TO_BIG = "File is to big";

@@ -1,19 +1,17 @@
 package pg.lib.filters.specification;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.lang.NonNull;
-
-import pg.lib.filters.common.Criteria;
-import pg.lib.filters.exception.EmptySpecificationException;
-
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
+import pg.lib.filters.common.Criteria;
+import pg.lib.filters.exception.EmptySpecificationException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,7 +70,7 @@ public class Specifications<T> implements Specification<T>, Cloneable {
     }
 
     @Override
-    public Predicate toPredicate(final @NonNull Root<T> root, final @NonNull CriteriaQuery<?> query, final @NonNull CriteriaBuilder builder) {
+    public Predicate toPredicate(final @NonNull Root<T> root, final @Nullable CriteriaQuery<?> query, final @NonNull CriteriaBuilder builder) {
         Predicate and = builder.and(searchCriteriaListAnd.stream()
                 .map(criteria -> criteria.getOperation().getPredicate(root, criteria, builder))
                 .toList()
@@ -85,12 +83,14 @@ public class Specifications<T> implements Specification<T>, Cloneable {
                 .toArray(new Predicate[0])
         );
 
-        if (isEmpty())
+        if (isEmpty()) {
             throw new EmptySpecificationException();
+        }
 
         //If both are not empty
-        if (!isEmpty())
+        if (!isEmpty()) {
             return builder.and(and, or);
+        }
 
         return searchCriteriaListAnd.isEmpty() ? or : and;
 

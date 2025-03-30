@@ -1,11 +1,9 @@
 package pg.lib.cqrs.config;
 
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-
 import pg.lib.cqrs.command.CommandExecutor;
 import pg.lib.cqrs.command.CommandHandler;
 import pg.lib.cqrs.command.DefaultCommandExecutor;
@@ -18,7 +16,7 @@ import pg.lib.cqrs.service.ServiceExecutor;
 import java.util.List;
 
 /**
- * The type Command query auto configuration.
+ * The type Command query autoconfiguration.
  */
 @Configuration
 @RequiredArgsConstructor
@@ -26,7 +24,7 @@ public class CommandQueryAutoConfiguration {
     private final Environment env;
 
     /**
-     * Command executor command executor.
+     * Command executor.
      *
      * @param commandHandlers the command handlers
      * @return the command executor
@@ -50,7 +48,7 @@ public class CommandQueryAutoConfiguration {
     }
 
     /**
-     * Service executor service executor.
+     * Service executor.
      *
      * @param commandExecutor the command executor
      * @param queryExecutor   the query executor

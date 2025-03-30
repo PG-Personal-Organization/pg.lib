@@ -24,17 +24,18 @@ public class ClassUtils {
      * @param parameterIndex  the parameter index
      * @return the class
      */
-    public Class<?> findInterfaceParameterType(Class<?> instanceClass, final Class<?> classOfInterest, final int parameterIndex) {
+    public static Class<?> findInterfaceParameterType(final Class<?> instanceClass, final Class<?> classOfInterest, final int parameterIndex) {
         final Map<Type, Type> typeMap = new HashMap<>();
+        Class<?> overriddenType = instanceClass;
         while (!implementInterface(instanceClass, classOfInterest)) {
             extractTypeArguments(typeMap, instanceClass);
-            instanceClass = instanceClass.getSuperclass();
-            if (instanceClass == null) {
+            overriddenType = instanceClass.getSuperclass();
+            if (overriddenType == null) {
                 throw new IllegalArgumentException();
             }
         }
 
-        final ParameterizedType parameterizedType = findInterface(instanceClass, classOfInterest);
+        final ParameterizedType parameterizedType = findInterface(overriddenType, classOfInterest);
         Type actualType = parameterizedType.getActualTypeArguments()[parameterIndex];
         if (typeMap.containsKey(actualType)) {
             actualType = typeMap.get(actualType);
@@ -47,7 +48,7 @@ public class ClassUtils {
         }
     }
 
-    private boolean implementInterface(final Class<?> instanceClass, final Class<?> classOfInterest) {
+    private static boolean implementInterface(final Class<?> instanceClass, final Class<?> classOfInterest) {
         return Stream
                 .of(instanceClass.getGenericInterfaces())
                 .map(ClassUtils::getClass)
@@ -55,7 +56,7 @@ public class ClassUtils {
     }
 
     @SuppressWarnings("rawtypes")
-    private Class<?> getClass(final Type type) {
+    private static Class<?> getClass(final Type type) {
         if (type instanceof Class clazz) {
             return clazz;
         } else if (type instanceof ParameterizedType parameterizedType) {

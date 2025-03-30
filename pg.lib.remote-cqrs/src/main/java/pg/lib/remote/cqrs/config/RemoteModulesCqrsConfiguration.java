@@ -19,7 +19,7 @@ import java.time.Duration;
 @Import({HttpConfig.class})
 public class RemoteModulesCqrsConfiguration {
     /**
-     * Http client http client.
+     * Http client.
      *
      * @param httpConfig the http config
      * @return the http client

@@ -39,6 +39,19 @@ import java.util.Collection;
 @Configuration
 public class CommonSecurityConfig {
     /**
+     * Method security expression handler method security expression handler.
+     *
+     * @param roleHierarchy the role hierarchy
+     * @return the method security expression handlerRoles
+     */
+    @Bean
+    public static @NonNull MethodSecurityExpressionHandler methodSecurityExpressionHandler(final @NonNull RoleHierarchy roleHierarchy) {
+        DefaultMethodSecurityExpressionHandler expressionHandler = new DefaultMethodSecurityExpressionHandler();
+        expressionHandler.setRoleHierarchy(roleHierarchy);
+        return expressionHandler;
+    }
+
+    /**
      * B crypt password encoder b crypt password encoder.
      *
      * @return the b crypt password encoder
@@ -73,19 +86,6 @@ public class CommonSecurityConfig {
         String hierarchy = String.format("ROLE_%s > ROLE_%s", Roles.ADMIN.name(), Roles.USER.name());
         roleHierarchy.setHierarchy(hierarchy);
         return roleHierarchy;
-    }
-
-    /**
-     * Method security expression handler method security expression handler.
-     *
-     * @param roleHierarchy the role hierarchy
-     * @return the method security expression handlerRoles
-     */
-    @Bean
-    public static @NonNull MethodSecurityExpressionHandler methodSecurityExpressionHandler(final @NonNull RoleHierarchy roleHierarchy) {
-        DefaultMethodSecurityExpressionHandler expressionHandler = new DefaultMethodSecurityExpressionHandler();
-        expressionHandler.setRoleHierarchy(roleHierarchy);
-        return expressionHandler;
     }
 
     /**
@@ -129,7 +129,7 @@ public class CommonSecurityConfig {
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers("/", "/actuator/**", "/swagger-ui/**", "/swagger-ui.html**", "/v3/api-docs/**").permitAll())
 
-               ;
+        ;
 
         requestPermits.forEach(permit -> {
             try {

@@ -1,9 +1,7 @@
 package pg.lib.cqrs.query;
 
-import lombok.extern.slf4j.Slf4j;
-
+import lombok.extern.log4j.Log4j2;
 import org.springframework.core.env.Environment;
-
 import pg.lib.cqrs.exception.QueryHandlerNotFoundException;
 import pg.lib.cqrs.util.ClassUtils;
 
@@ -17,7 +15,7 @@ import static java.util.Objects.isNull;
 /**
  * The type Default query executor.
  */
-@Slf4j
+@Log4j2
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class DefaultQueryExecutor implements QueryExecutor {
     private final Map<Class<?>, QueryHandler> queryHandlers;
@@ -35,15 +33,19 @@ public class DefaultQueryExecutor implements QueryExecutor {
         canLog = Arrays.stream(env.getActiveProfiles()).toList().contains("devlocal");
 
         if (!queryHandlers.isEmpty()) {
-            if (canLog) log.info("------------------ Registering found QueryHandler beans --------------------------\n");
+            if (canLog) {
+                log.info("------------------ Registering found QueryHandler beans --------------------------\n");
+            }
             queryHandlers.forEach(this::addQueryHandler);
-            if (canLog) log.info("------------------ Registering QueryHandlers completed  --------------------------");
+            if (canLog) {
+                log.info("------------------ Registering QueryHandlers completed  --------------------------");
+            }
         }
     }
 
     @Override
     public <QueryResult, QueryType extends Query<QueryResult>>
-    QueryResult execute(QueryType query) throws QueryHandlerNotFoundException {
+    QueryResult execute(final QueryType query) throws QueryHandlerNotFoundException {
         final QueryHandler<QueryType, QueryResult> queryHandler = queryHandlers.get(query.getClass());
 
         if (isNull(queryHandler)) {
@@ -54,7 +56,9 @@ public class DefaultQueryExecutor implements QueryExecutor {
     }
 
     private void addQueryHandler(final QueryHandler handler) {
-        if (canLog) log.info("QueryHandler: %s%n".formatted(handler.getClass()));
+        if (canLog) {
+            log.info("QueryHandler: %s%n".formatted(handler.getClass()));
+        }
         this.queryHandlers.put(ClassUtils.findInterfaceParameterType(handler.getClass(), QueryHandler.class, 0), handler);
     }
 }

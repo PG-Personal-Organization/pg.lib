@@ -1,7 +1,6 @@
 package pg.lib.cqrs;
 
 import lombok.NoArgsConstructor;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,7 +9,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.env.Environment;
-
 import pg.lib.cqrs.command.Command;
 import pg.lib.cqrs.command.CommandExecutor;
 import pg.lib.cqrs.command.DefaultCommandExecutor;
