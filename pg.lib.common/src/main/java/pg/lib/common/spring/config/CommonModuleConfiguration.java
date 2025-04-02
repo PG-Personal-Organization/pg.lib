@@ -9,7 +9,8 @@ import org.springframework.context.annotation.Import;
 @Configuration
 @Import({
         CommonSecurityConfig.class,
-        CommonSwaggerConfig.class
+        CommonSwaggerConfig.class,
+        CommonTracingConfig.class
 })
 public class CommonModuleConfiguration {
 

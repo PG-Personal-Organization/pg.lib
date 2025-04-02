@@ -1,11 +1,15 @@
 package pg.lib.common.spring.storage;
 
+import java.util.Map;
 import java.util.Optional;
 
 /**
  * The interface Headers holder.
  */
 public interface HeadersHolder {
+
+    Map<String, String> getAllHeaders();
+
     /**
      * Put header.
      *

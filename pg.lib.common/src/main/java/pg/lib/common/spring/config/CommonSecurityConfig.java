@@ -20,6 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
+import org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -28,6 +29,7 @@ import pg.lib.common.spring.exception.InvalidRequestCustomizerException;
 import pg.lib.common.spring.exception.MissingValidHeaderAuthenticationFilterException;
 import pg.lib.common.spring.storage.HeadersHolder;
 import pg.lib.common.spring.storage.ThreadLocalHeadersHolder;
+import pg.lib.common.spring.tracing.LoggingFilter;
 import pg.lib.common.spring.user.Roles;
 
 import java.util.Arrays;
@@ -118,7 +120,8 @@ public class CommonSecurityConfig {
             final @NonNull CorsConfigurationSource corsConfigurationSource,
             final @NonNull Collection<Customizer<
                     AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry>> requestPermits,
-            final @NonNull HeaderAuthenticationFilter headerAuthenticationFilter) throws Exception {
+            final @NonNull HeaderAuthenticationFilter headerAuthenticationFilter,
+            final @NonNull LoggingFilter loggingFilter) throws Exception {
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource))
                 .csrf(AbstractHttpConfigurer::disable)
@@ -126,6 +129,7 @@ public class CommonSecurityConfig {
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
+                .addFilterBefore(loggingFilter, WebAsyncManagerIntegrationFilter.class)
                 .addFilterBefore(headerAuthenticationFilter, AnonymousAuthenticationFilter.class)
 
                 .authorizeHttpRequests(requests -> requests

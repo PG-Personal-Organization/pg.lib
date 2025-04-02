@@ -14,6 +14,11 @@ public class ThreadLocalHeadersHolder implements HeadersHolder {
     private final ThreadLocal<Map<String, String>> headersMap = ThreadLocal.withInitial(HashMap::new);
 
     @Override
+    public Map<String, String> getAllHeaders() {
+        return Map.copyOf(headersMap.get());
+    }
+
+    @Override
     public void putHeader(final String headerName, final String headerValue) {
         this.headersMap.get().put(headerName, headerValue);
     }
