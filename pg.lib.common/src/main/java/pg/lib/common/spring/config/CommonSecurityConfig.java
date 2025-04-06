@@ -1,7 +1,7 @@
 package pg.lib.common.spring.config;
 
 import lombok.NonNull;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -26,7 +26,6 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import pg.lib.common.spring.auth.HeaderAuthenticationFilter;
 import pg.lib.common.spring.exception.InvalidRequestCustomizerException;
-import pg.lib.common.spring.exception.MissingValidHeaderAuthenticationFilterException;
 import pg.lib.common.spring.storage.HeadersHolder;
 import pg.lib.common.spring.storage.ThreadLocalHeadersHolder;
 import pg.lib.common.spring.tracing.LoggingFilter;
@@ -34,10 +33,12 @@ import pg.lib.common.spring.user.Roles;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Optional;
 
 /**
  * The type Common security config.
  */
+@Log4j2
 @Configuration
 public class CommonSecurityConfig {
     private static final int ENCRYPT_STRENGTH = 8;
@@ -93,17 +94,6 @@ public class CommonSecurityConfig {
     }
 
     /**
-     * Authentication filter header authentication filter.
-     *
-     * @return the header authentication filter
-     */
-    @Bean
-    @ConditionalOnMissingBean
-    public HeaderAuthenticationFilter authenticationFilter() {
-        throw new MissingValidHeaderAuthenticationFilterException();
-    }
-
-    /**
      * Security filter chain security filter chain.
      *
      * @param http                       the http
@@ -120,7 +110,7 @@ public class CommonSecurityConfig {
             final @NonNull CorsConfigurationSource corsConfigurationSource,
             final @NonNull Collection<Customizer<
                     AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry>> requestPermits,
-            final @NonNull HeaderAuthenticationFilter headerAuthenticationFilter,
+            final Optional<HeaderAuthenticationFilter> headerAuthenticationFilter,
             final @NonNull LoggingFilter loggingFilter) throws Exception {
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource))
@@ -130,10 +120,13 @@ public class CommonSecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .addFilterBefore(loggingFilter, WebAsyncManagerIntegrationFilter.class)
-                .addFilterBefore(headerAuthenticationFilter, AnonymousAuthenticationFilter.class)
 
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers("/", "/actuator/**", "/swagger-ui/**", "/swagger-ui.html**", "/v3/api-docs/**").permitAll());
+
+        headerAuthenticationFilter.ifPresentOrElse(authenticationFilter
+                        -> http.addFilterBefore(authenticationFilter, AnonymousAuthenticationFilter.class),
+                () -> log.warn("Missing valid header authentication filter. Not requests will be authorized"));
 
         requestPermits.forEach(permit -> {
             try {
