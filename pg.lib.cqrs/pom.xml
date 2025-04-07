@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>pg.lib.cqrs</artifactId>
+    <artifactId>pg-lib-cqrs</artifactId>
 
     <dependencies>
         <dependency>

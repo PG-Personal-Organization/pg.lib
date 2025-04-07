@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>pg.lib.aws-files</artifactId>
+    <artifactId>pg-lib-aws-files</artifactId>
 
     <dependencies>
         <dependency>

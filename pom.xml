@@ -28,27 +28,27 @@
         <dependencies>
             <dependency>
                 <groupId>org.pg</groupId>
-                <artifactId>pg.lib.filters</artifactId>
+                <artifactId>pg-lib-filters</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.pg</groupId>
-                <artifactId>pg.lib.aws-files</artifactId>
+                <artifactId>pg-lib-aws-files</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.pg</groupId>
-                <artifactId>pg.lib.cqrs</artifactId>
+                <artifactId>pg-lib-cqrs</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.pg</groupId>
-                <artifactId>pg.lib.remote-cqrs</artifactId>
+                <artifactId>pg-lib-remote-cqrs</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.pg</groupId>
-                <artifactId>pg.lib.common</artifactId>
+                <artifactId>pg-lib-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>
