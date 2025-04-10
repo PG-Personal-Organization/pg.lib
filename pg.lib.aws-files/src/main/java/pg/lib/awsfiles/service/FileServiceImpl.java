@@ -14,6 +14,7 @@ import pg.lib.awsfiles.entity.FileEntity;
 import pg.lib.awsfiles.repository.FileRepository;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -137,6 +138,12 @@ public class FileServiceImpl implements FileService {
         s3client.deleteObject(amazonConfig.getBucketName(), fileEntity.getFileName());
 
         fileRepository.deleteById(fileId);
+    }
+
+    @Override
+    public InputStream getFileStream(final UUID fileId) {
+        var file = getFileById(fileId);
+        return s3client.getObject(amazonConfig.getBucketName(), file.getFileName()).getObjectContent();
     }
 
     public FileEntity getFileById(final UUID fileId) {
