@@ -1,4 +1,4 @@
-package pg.lib.awsfiles.config;
+package pg.lib.awsfiles.infrastructure.config;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
@@ -21,7 +21,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @Configuration
 @ConfigurationProperties(prefix = "aws")
 @EntityScan("pg.lib.awsfiles.entity")
-@EnableJpaRepositories("pg.lib.awsfiles.repository")
+@EnableJpaRepositories("pg.lib.awsfiles.infrastructure.repository")
 @ComponentScan("pg.lib.awsfiles")
 public class AmazonConfig {
 

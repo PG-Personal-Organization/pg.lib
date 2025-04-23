@@ -1,4 +1,4 @@
-package pg.lib.awsfiles.entity;
+package pg.lib.awsfiles.infrastructure.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

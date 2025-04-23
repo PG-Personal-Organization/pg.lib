@@ -1,8 +1,8 @@
-package pg.lib.awsfiles.repository;
+package pg.lib.awsfiles.infrastructure.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import pg.lib.awsfiles.entity.FileEntity;
+import pg.lib.awsfiles.infrastructure.entity.FileEntity;
 
 import java.util.UUID;
 

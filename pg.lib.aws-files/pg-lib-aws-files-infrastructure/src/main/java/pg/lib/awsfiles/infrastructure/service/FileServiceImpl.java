@@ -1,4 +1,4 @@
-package pg.lib.awsfiles.service;
+package pg.lib.awsfiles.infrastructure.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
@@ -9,9 +9,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
-import pg.lib.awsfiles.config.AmazonConfig;
-import pg.lib.awsfiles.entity.FileEntity;
-import pg.lib.awsfiles.repository.FileRepository;
+import pg.lib.awsfiles.infrastructure.config.AmazonConfig;
+import pg.lib.awsfiles.infrastructure.entity.FileEntity;
+import pg.lib.awsfiles.infrastructure.repository.FileRepository;
+import pg.lib.awsfiles.service.api.FileService;
+import pg.lib.awsfiles.service.api.FileView;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -67,8 +69,8 @@ public class FileServiceImpl implements FileService {
         }
     }
 
-    public Optional<FileEntity> findById(final @NonNull UUID fileId) {
-        return fileRepository.findById(fileId);
+    public Optional<FileView> findById(final @NonNull UUID fileId) {
+        return fileRepository.findById(fileId).map(this::toFileView);
     }
 
     public UUID initFile(final @NonNull MultipartFile file) {
@@ -124,8 +126,8 @@ public class FileServiceImpl implements FileService {
         return awsUrl + fileEntity.getFileName();
     }
 
-    public List<String> getFilesUrls(final List<FileEntity> fileEntities) {
-        return fileEntities
+    public List<String> getFilesUrls(final List<FileView> fileViews) {
+        return fileViews
                 .stream()
                 .map(fileEntity -> awsUrl + fileEntity.getFileName())
                 .toList();
@@ -133,7 +135,7 @@ public class FileServiceImpl implements FileService {
     }
 
     public void deleteFile(final UUID fileId) {
-        FileEntity fileEntity = getFileById(fileId);
+        FileView fileEntity = getFileById(fileId);
 
         s3client.deleteObject(amazonConfig.getBucketName(), fileEntity.getFileName());
 
@@ -146,9 +148,23 @@ public class FileServiceImpl implements FileService {
         return s3client.getObject(amazonConfig.getBucketName(), file.getFileName()).getObjectContent();
     }
 
-    public FileEntity getFileById(final UUID fileId) {
-        return fileRepository.findById(fileId).orElseThrow(
+    @Override
+    public Optional<InputStream> findFileStream(final UUID fileId) {
+        var file = findById(fileId);
+        return file.map(f -> s3client.getObject(amazonConfig.getBucketName(), f.getFileName()).getObjectContent());
+    }
+
+    public FileView getFileById(final UUID fileId) {
+        FileEntity file = fileRepository.findById(fileId).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, notFound(fileId))
         );
+        return toFileView(file);
+    }
+
+    private FileView toFileView(final @NonNull FileEntity fileEntity) {
+        return FileView.builder()
+                .fileId(fileEntity.getFileId())
+                .fileName(fileEntity.getFileName())
+                .build();
     }
 }

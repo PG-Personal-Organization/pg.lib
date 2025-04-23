@@ -1,7 +1,6 @@
-package pg.lib.awsfiles.service;
+package pg.lib.awsfiles.service.api;
 
 import org.springframework.web.multipart.MultipartFile;
-import pg.lib.awsfiles.entity.FileEntity;
 
 import java.io.InputStream;
 import java.util.List;
@@ -18,7 +17,7 @@ public interface FileService {
      * @param fileId the file id
      * @return the optional
      */
-    Optional<FileEntity> findById(UUID fileId);
+    Optional<FileView> findById(UUID fileId);
 
     /**
      * Init file uuid.
@@ -50,15 +49,15 @@ public interface FileService {
      * @param fileId the file id
      * @return the file by id
      */
-    FileEntity getFileById(UUID fileId);
+    FileView getFileById(UUID fileId);
 
     /**
      * Gets files urls.
      *
-     * @param fileEntities the file entities
+     * @param fileViews the file views
      * @return the files urls
      */
-    List<String> getFilesUrls(List<FileEntity> fileEntities);
+    List<String> getFilesUrls(List<FileView> fileViews);
 
     /**
      * Delete file.
@@ -68,4 +67,6 @@ public interface FileService {
     void deleteFile(UUID fileId);
 
     InputStream getFileStream(UUID fileId);
+
+    Optional<InputStream> findFileStream(UUID fileId);
 }

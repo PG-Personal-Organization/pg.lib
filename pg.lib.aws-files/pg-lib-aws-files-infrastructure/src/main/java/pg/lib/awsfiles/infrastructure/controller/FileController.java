@@ -1,11 +1,11 @@
-package pg.lib.awsfiles.controller;
+package pg.lib.awsfiles.infrastructure.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import pg.lib.awsfiles.service.FileService;
+import pg.lib.awsfiles.service.api.FileService;
 
 import java.util.UUID;
 
