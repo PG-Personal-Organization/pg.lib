@@ -8,6 +8,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -19,6 +20,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
  * The type Amazon config.
  */
 @Configuration
+@ConditionalOnProperty(value = "pg.lib.awsfiles.enabled", havingValue = "true")
 @ConfigurationProperties(prefix = "aws")
 @EntityScan("pg.lib.awsfiles.entity")
 @EnableJpaRepositories("pg.lib.awsfiles.infrastructure.repository")
