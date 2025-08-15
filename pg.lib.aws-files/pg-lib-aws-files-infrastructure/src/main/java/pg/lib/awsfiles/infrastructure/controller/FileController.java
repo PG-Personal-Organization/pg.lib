@@ -13,7 +13,7 @@ import java.util.UUID;
  * The type File controller.
  */
 @RestController
-@RequestMapping(path = "api/v1/files")
+@RequestMapping(path = HttpServicesPaths.BASE_PATH)
 @AllArgsConstructor
 @Tag(name = "Files")
 public class FileController {
@@ -36,7 +36,7 @@ public class FileController {
      * @param file the file
      * @return the uuid
      */
-    @PostMapping(value = "/rest/upload", consumes = {
+    @PostMapping(value = HttpServicesPaths.UPLOAD_PATH, consumes = {
             "multipart/form-data"})
     public UUID uploadFile(final @NonNull @RequestParam("file") MultipartFile file) {
         return fileService.uploadFile(file);
