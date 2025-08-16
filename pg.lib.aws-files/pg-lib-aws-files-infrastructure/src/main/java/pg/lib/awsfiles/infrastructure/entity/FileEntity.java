@@ -21,7 +21,7 @@ import java.util.UUID;
 public class FileEntity implements Serializable {
     @Id
     @GeneratedValue(
-            strategy = GenerationType.AUTO
+            strategy = GenerationType.UUID
     )
     @Column(
             nullable = false,
