@@ -6,8 +6,7 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import lombok.Getter;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.Data;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -25,39 +24,21 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
         SecurityConfig.class
 })
 @ConditionalOnProperty(value = "pg.lib.awsfiles.enabled", havingValue = "true")
-@ConfigurationProperties(prefix = "aws")
+@ConfigurationProperties(prefix = "pg.lib.awsfiles")
 @EntityScan("pg.lib.awsfiles.entity")
 @EnableJpaRepositories("pg.lib.awsfiles.infrastructure.repository")
 @ComponentScan("pg.lib.awsfiles")
+@Data
 public class AmazonConfig {
+    private String bucketName;
+    private String accessKey;
+    private String secretKey;
+    private String awsUrl;
 
-    @Getter
-    private final String bucketName;
-    @Getter
-    private final String accessKey;
-    @Getter
-    private final String secretKey;
     private final AWSCredentials credentials;
 
-    /**
-     * Instantiates a new Amazon config.
-     *
-     * @param bucketName the bucket name
-     * @param accessKey  the access key
-     * @param secretKey  the secret key
-     */
-    @SuppressWarnings("checkstyle:HiddenField")
-    public AmazonConfig(final @Value("${aws.bucket}") String bucketName,
-                        final @Value("${aws.access}") String accessKey,
-                        final @Value("${aws.secret}") String secretKey) {
-        this.bucketName = bucketName;
-        this.accessKey = accessKey;
-        this.secretKey = secretKey;
-
-        credentials = new BasicAWSCredentials(
-                accessKey,
-                secretKey
-        );
+    public AmazonConfig() {
+        credentials = new BasicAWSCredentials(accessKey, secretKey);
     }
 
     /**

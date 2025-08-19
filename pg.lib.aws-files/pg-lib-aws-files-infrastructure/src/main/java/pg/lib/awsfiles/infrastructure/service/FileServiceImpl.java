@@ -4,7 +4,6 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,7 +33,6 @@ public class FileServiceImpl implements FileService {
     private final AmazonS3 s3client;
     private final AmazonConfig amazonConfig;
     private final FileRepository fileRepository;
-    private final String awsUrl;
 
     /**
      * Instantiates a new File service.
@@ -42,19 +40,16 @@ public class FileServiceImpl implements FileService {
      * @param s3client       the s 3 client
      * @param amazonConfig   the amazon config
      * @param fileRepository the file repository
-     * @param awsUrl         the aws url
      */
     @SuppressWarnings("checkstyle:HiddenField")
     public FileServiceImpl(final AmazonS3 s3client,
                            final AmazonConfig amazonConfig,
-                           final FileRepository fileRepository,
-                           final @Value("${aws.url}") String awsUrl) {
+                           final FileRepository fileRepository) {
         this.s3client = s3client;
         this.amazonConfig = amazonConfig;
         this.fileRepository = fileRepository;
-        this.awsUrl = awsUrl;
 
-        if (awsUrl == null) {
+        if (amazonConfig.getAwsUrl() == null) {
             log.error("Aws url property is not set");
         }
     }
@@ -123,13 +118,13 @@ public class FileServiceImpl implements FileService {
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, notFound(fileId))
         );
 
-        return awsUrl + fileEntity.getFileName();
+        return amazonConfig.getAwsUrl() + fileEntity.getFileName();
     }
 
     public List<String> getFilesUrls(final List<FileView> fileViews) {
         return fileViews
                 .stream()
-                .map(fileEntity -> awsUrl + fileEntity.getFileName())
+                .map(fileEntity -> amazonConfig.getAwsUrl() + fileEntity.getFileName())
                 .toList();
 
     }
