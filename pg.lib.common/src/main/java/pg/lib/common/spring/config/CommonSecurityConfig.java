@@ -33,7 +33,6 @@ import pg.lib.common.spring.user.Roles;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Optional;
 
 /**
  * The type Common security config.
@@ -110,7 +109,7 @@ public class CommonSecurityConfig {
             final @NonNull CorsConfigurationSource corsConfigurationSource,
             final @NonNull Collection<Customizer<
                     AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry>> requestPermits,
-            final Optional<HeaderAuthenticationFilter> headerAuthenticationFilter,
+            final @NonNull HeaderAuthenticationFilter headerAuthenticationFilter,
             final @NonNull LoggingFilter loggingFilter) throws Exception {
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource))
@@ -122,11 +121,9 @@ public class CommonSecurityConfig {
                 .addFilterBefore(loggingFilter, WebAsyncManagerIntegrationFilter.class)
 
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/", "/actuator/**", "/swagger-ui/**", "/swagger-ui.html**", "/v3/api-docs/**").permitAll());
+                        .requestMatchers("/", "/actuator/**", "/swagger-ui/**", "/swagger-ui.html**", "/v3/api-docs/**").permitAll())
 
-        headerAuthenticationFilter.ifPresentOrElse(authenticationFilter
-                        -> http.addFilterBefore(authenticationFilter, AnonymousAuthenticationFilter.class),
-                () -> log.warn("Missing valid header authentication filter. Not requests will be authorized"));
+                .addFilterBefore(headerAuthenticationFilter, AnonymousAuthenticationFilter.class);
 
         requestPermits.forEach(permit -> {
             try {

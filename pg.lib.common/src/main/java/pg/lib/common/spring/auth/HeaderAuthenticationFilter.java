@@ -5,6 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -16,6 +17,7 @@ import java.io.IOException;
 /**
  * The interface Header authentication filter.
  */
+@Log4j2
 public abstract class HeaderAuthenticationFilter extends OncePerRequestFilter {
     /**
      * The Headers holder.
@@ -50,6 +52,7 @@ public abstract class HeaderAuthenticationFilter extends OncePerRequestFilter {
                                     final @NonNull HttpServletResponse response,
                                     final @NonNull FilterChain filterChain) throws ServletException, IOException {
         final String authenticationToken = request.getHeader(HeaderNames.CONTEXT_TOKEN);
+        log.debug("Authentication token: {}", authenticationToken);
 
         if (!(authenticationToken == null || authenticationToken.isBlank())) {
             storeAuthenticationToken(authenticationToken);
