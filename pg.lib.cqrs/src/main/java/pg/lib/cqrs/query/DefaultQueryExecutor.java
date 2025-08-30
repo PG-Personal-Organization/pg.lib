@@ -1,65 +1,77 @@
 package pg.lib.cqrs.query;
 
 import lombok.extern.log4j.Log4j2;
-import org.springframework.core.env.Environment;
+import org.springframework.beans.factory.ObjectProvider;
 import pg.lib.cqrs.exception.QueryHandlerNotFoundException;
 import pg.lib.cqrs.util.ClassUtils;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static java.util.Objects.isNull;
 
 /**
- * The type Default query executor.
+ * Default implementation of QueryExecutor that can eagerly register known QueryHandlers
+ * and lazily resolve missing ones from the Spring context on first use.
  */
 @Log4j2
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class DefaultQueryExecutor implements QueryExecutor {
-    private final Map<Class<?>, QueryHandler> queryHandlers;
-    private final boolean canLog;
+    private final Map<Class<?>, QueryHandler> queryHandlers = new HashMap<>();
+    private final ObjectProvider<List<QueryHandler>> queryHandlersProvider;
 
-    /**
-     * Instantiates a new Default query executor.
-     *
-     * @param queryHandlers the query handlers
-     * @param env           the env
-     */
     @SuppressWarnings("checkstyle:HiddenField")
-    public DefaultQueryExecutor(final Collection<QueryHandler> queryHandlers, final Environment env) {
-        this.queryHandlers = new HashMap<>();
+    public DefaultQueryExecutor(final ObjectProvider<List<QueryHandler>> queryHandlersProvider) {
+        this.queryHandlersProvider = queryHandlersProvider;
+        var initialHandlers = queryHandlersProvider.getIfAvailable(List::of);
 
-        canLog = Arrays.stream(env.getActiveProfiles()).toList().contains("devlocal");
-
-        if (!queryHandlers.isEmpty()) {
-            if (canLog) {
-                log.info("------------------ Registering found QueryHandler beans --------------------------\n");
-            }
-            queryHandlers.forEach(this::addQueryHandler);
-            if (canLog) {
-                log.info("------------------ Registering QueryHandlers completed  --------------------------");
-            }
+        if (!initialHandlers.isEmpty()) {
+            log.debug("Registering {} QueryHandler beans eagerly", initialHandlers.size());
+            initialHandlers.forEach(this::addQueryHandler);
+            log.debug("Initial QueryHandlers registered");
         }
     }
 
     @Override
     public <QueryResult, QueryType extends Query<QueryResult>>
-    QueryResult execute(final QueryType query) throws QueryHandlerNotFoundException {
-        final QueryHandler<QueryType, QueryResult> queryHandler = queryHandlers.get(query.getClass());
+    QueryResult execute(final QueryType query) {
+        Class<?> queryClass = query.getClass();
+        QueryHandler<QueryType, QueryResult> queryHandler = queryHandlers.get(queryClass);
 
         if (isNull(queryHandler)) {
-            throw new QueryHandlerNotFoundException("Query Handler for Query: %s - not found".formatted(query.getClass()));
+            log.info("QueryHandler for {} not found in cache, attempting to resolve from Spring context", queryClass);
+
+            queryHandler = resolveHandler(queryClass);
+
+            if (isNull(queryHandler)) {
+                throw new QueryHandlerNotFoundException(
+                        "QueryHandler for query type %s not found".formatted(queryClass.getName())
+                );
+            }
+
+            // cache for next use
+            queryHandlers.put(queryClass, queryHandler);
+            log.info("Resolved and cached QueryHandler {} for {}", queryHandler.getClass(), queryClass);
         }
 
         return queryHandler.handle(query);
     }
 
     private void addQueryHandler(final QueryHandler handler) {
-        if (canLog) {
-            log.info("QueryHandler: %s%n".formatted(handler.getClass()));
-        }
-        this.queryHandlers.put(ClassUtils.findInterfaceParameterType(handler.getClass(), QueryHandler.class, 0), handler);
+        Class<?> queryType = ClassUtils.findInterfaceParameterType(handler.getClass(), QueryHandler.class, 0);
+        log.debug("Registering handler {} for query type {}", handler.getClass().getSimpleName(), queryType.getSimpleName());
+        queryHandlers.put(queryType, handler);
+    }
+
+    @SuppressWarnings("unchecked")
+    private <QueryResult, QueryType extends Query<QueryResult>>
+    QueryHandler<QueryType, QueryResult> resolveHandler(final Class<?> queryClass) {
+        return queryHandlersProvider.getIfAvailable(List::of).stream()
+                .filter(handler ->
+                        ClassUtils.findInterfaceParameterType(handler.getClass(), QueryHandler.class, 0)
+                                .equals(queryClass))
+                .findFirst()
+                .orElse(null);
     }
 }

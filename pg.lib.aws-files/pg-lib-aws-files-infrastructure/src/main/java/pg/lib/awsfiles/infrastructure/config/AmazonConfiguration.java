@@ -23,7 +23,7 @@ import pg.lib.awsfiles.service.api.AmazonConfig;
         AmazonConfigImpl.class
 })
 @Configuration
-@EntityScan("pg.lib.awsfiles.entity")
+@EntityScan("pg.lib.awsfiles.infrastructure.entity")
 @EnableJpaRepositories("pg.lib.awsfiles.infrastructure.repository")
 @ComponentScan("pg.lib.awsfiles")
 public class AmazonConfiguration {

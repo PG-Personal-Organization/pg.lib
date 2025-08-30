@@ -1,105 +1,40 @@
 package pg.lib.cqrs.util;
 
 import lombok.experimental.UtilityClass;
+import org.springframework.core.ResolvableType;
 
-import java.lang.reflect.Array;
-import java.lang.reflect.GenericArrayType;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Stream;
-
-/**
- * The type Class utils.
- */
 @UtilityClass
 public class ClassUtils {
 
     /**
-     * Find interface parameter type class.
+     * Resolve the generic parameter type of the implemented interface.
      *
-     * @param instanceClass   the instance class
-     * @param classOfInterest the class of interest
-     * @param parameterIndex  the parameter index
-     * @return the class
+     * @param instanceClass   the concrete class implementing the interface
+     * @param classOfInterest the generic interface type (e.g. CommandHandler.class)
+     * @param parameterIndex  the index of the generic parameter to resolve
+     * @return the resolved class
      */
-    public static Class<?> findInterfaceParameterType(final Class<?> instanceClass, final Class<?> classOfInterest,
-                                                      final int parameterIndex) {
-        final Map<Type, Type> typeMap = new HashMap<>();
-        Class<?> overriddenType = instanceClass;
-        while (!implementInterface(instanceClass, classOfInterest)) {
-            extractTypeArguments(typeMap, instanceClass);
-            overriddenType = instanceClass.getSuperclass();
-            if (overriddenType == null) {
-                throw new IllegalArgumentException();
-            }
+    public static Class<?> findInterfaceParameterType(
+            final Class<?> instanceClass,
+            final Class<?> classOfInterest,
+            final int parameterIndex) {
+
+        ResolvableType resolvableType = ResolvableType.forClass(instanceClass)
+                .as(classOfInterest);
+
+        if (resolvableType == ResolvableType.NONE) {
+            throw new IllegalArgumentException(
+                    "Class %s does not implement %s"
+                            .formatted(instanceClass, classOfInterest));
         }
 
-        final ParameterizedType parameterizedType = findInterface(overriddenType, classOfInterest);
-        Type actualType = parameterizedType.getActualTypeArguments()[parameterIndex];
-        if (typeMap.containsKey(actualType)) {
-            actualType = typeMap.get(actualType);
+        Class<?> resolved = resolvableType.getGeneric(parameterIndex).resolve();
+        if (resolved == null) {
+            throw new IllegalArgumentException(
+                    "Could not resolve generic parameter %d of %s for class %s"
+                            .formatted(parameterIndex, classOfInterest, instanceClass));
         }
 
-        if (actualType instanceof Class) {
-            return (Class<?>) actualType;
-        } else {
-            throw new IllegalArgumentException();
-        }
-    }
-
-    private static boolean implementInterface(final Class<?> instanceClass, final Class<?> classOfInterest) {
-        return Stream
-                .of(instanceClass.getGenericInterfaces())
-                .map(ClassUtils::getClass)
-                .anyMatch(classOfInterest::equals);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private static Class<?> getClass(final Type type) {
-        if (type instanceof Class clazz) {
-            return clazz;
-        } else if (type instanceof ParameterizedType parameterizedType) {
-            return getClass((parameterizedType).getRawType());
-        } else if (type instanceof GenericArrayType genericArrayType) {
-            final Type componentType = (genericArrayType).getGenericComponentType();
-            final Class<?> componentClass = getClass(componentType);
-
-            if (componentClass != null) {
-                return Array.newInstance(componentClass, 0).getClass();
-            } else {
-                return null;
-            }
-        } else {
-            return null;
-        }
-    }
-
-    private static ParameterizedType findInterface(final Class<?> instanceClass, final Class<?> classOfInterest) {
-        return Stream
-                .of(instanceClass.getGenericInterfaces())
-                .filter(typeInterface -> getClass(typeInterface).equals(classOfInterest))
-                .findFirst()
-                .map(ParameterizedType.class::cast)
-                .orElseThrow(RuntimeException::new);
-    }
-
-    private static void extractTypeArguments(final Map<Type, Type> typeMap, final Class<?> clazz) {
-        final Type genericSuperclass = clazz.getGenericSuperclass();
-
-        if (!(genericSuperclass instanceof final ParameterizedType parameterizedType)) {
-            return;
-        }
-
-        final Type[] typeParameter = ((Class<?>) parameterizedType.getRawType()).getTypeParameters();
-        final Type[] actualTypeArgument = parameterizedType.getActualTypeArguments();
-
-        for (int i = 0; i < typeParameter.length; i++) {
-            if (typeMap.containsKey(actualTypeArgument[i])) {
-                actualTypeArgument[i] = typeMap.get(actualTypeArgument[i]);
-            }
-            typeMap.put(typeParameter[i], actualTypeArgument[i]);
-        }
+        return resolved;
     }
 }

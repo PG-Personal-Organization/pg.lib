@@ -5,6 +5,7 @@ import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.http.HttpHeaders;
 import pg.lib.common.spring.auth.HeaderAuthenticationFilter;
 import pg.lib.common.spring.auth.HeaderNames;
 import pg.lib.cqrs.command.Command;
@@ -19,6 +20,8 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Objects;
+
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 /**
  * The type Http module service executor.
@@ -54,7 +57,7 @@ public class HttpModuleServiceExecutor implements RemoteCqrsModuleServiceExecuto
         var request = prepareRequest(query, module, 1);
         var response = executeRequest(request);
         var clazz = provideQueryReturnClass(query.getClass());
-        return deserializeResult(response.body(), clazz);
+        return deserializeResult(response.body(), clazz, getContentType(response));
     }
 
     @Override
@@ -64,7 +67,7 @@ public class HttpModuleServiceExecutor implements RemoteCqrsModuleServiceExecuto
         var request = prepareRequest(query, module, version);
         var response = executeRequest(request);
         var clazz = provideQueryReturnClass(query.getClass());
-        return deserializeResult(response.body(), clazz);
+        return deserializeResult(response.body(), clazz, getContentType(response));
     }
 
     @Override
@@ -74,7 +77,7 @@ public class HttpModuleServiceExecutor implements RemoteCqrsModuleServiceExecuto
         var request = prepareRequest(command, module, 1);
         var response = executeRequest(request);
         var clazz = provideCommandReturnClass(command.getClass());
-        return deserializeResult(response.body(), clazz);
+        return deserializeResult(response.body(), clazz, getContentType(response));
     }
 
     @Override
@@ -84,7 +87,7 @@ public class HttpModuleServiceExecutor implements RemoteCqrsModuleServiceExecuto
         var request = prepareRequest(command, module, version);
         var response = executeRequest(request);
         var clazz = provideCommandReturnClass(command.getClass());
-        return deserializeResult(response.body(), clazz);
+        return deserializeResult(response.body(), clazz, getContentType(response));
     }
 
     @SneakyThrows
@@ -131,7 +134,11 @@ public class HttpModuleServiceExecutor implements RemoteCqrsModuleServiceExecuto
         return ClassUtils.findInterfaceParameterType(command, Command.class, 0);
     }
 
-    private <T> T deserializeResult(final String o, final Class<?> clazz) {
+    @SuppressWarnings("unchecked")
+    private <T> T deserializeResult(final String o, final Class<?> clazz, final String contentType) {
+        if (clazz.equals(String.class) && !contentType.equals(APPLICATION_JSON_VALUE)) {
+            return (T) o;
+        }
         try {
             T result = (T) objectMapper.readValue(o, clazz);
             log.info("Deserialized response object from: {} to: {}", o, result);
@@ -139,5 +146,9 @@ public class HttpModuleServiceExecutor implements RemoteCqrsModuleServiceExecuto
         } catch (Exception e) {
             throw new MissMatchResponseTypeException(clazz, o.getClass());
         }
+    }
+
+    private String getContentType(final HttpResponse<String> response) {
+        return response.headers().firstValue(HttpHeaders.CONTENT_TYPE).orElse(APPLICATION_JSON_VALUE);
     }
 }

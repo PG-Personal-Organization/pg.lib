@@ -2,6 +2,8 @@ package pg.lib.awsfiles.infrastructure.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import pg.lib.awsfiles.infrastructure.entity.FileEntity;
 
 import java.util.UUID;
@@ -14,16 +16,18 @@ public interface FileRepository extends JpaRepository<FileEntity, UUID>, JpaSpec
     /**
      * Exists by file name boolean.
      *
-     * @param concatedFileName the concated file name
+     * @param concatenatedFileName the concated file name
      * @return the boolean
      */
-    boolean existsByFileName(String concatedFileName);
+    @Query("SELECT COUNT(f) > 0 FROM FileEntity f WHERE f.fileName = :concatenatedFileName")
+    boolean existsByFileName(@Param("concatenatedFileName") String concatenatedFileName);
 
     /**
      * Gets by file name.
      *
-     * @param concatedFileName the concated file name
+     * @param concatenatedFileName the concated file name
      * @return the by file name
      */
-    FileEntity getByFileName(String concatedFileName);
+    @Query("SELECT f FROM FileEntity f WHERE f.fileName = :concatenatedFileName")
+    FileEntity getByFileName(@Param("concatenatedFileName") String concatenatedFileName);
 }

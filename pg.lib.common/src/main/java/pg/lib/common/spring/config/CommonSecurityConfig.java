@@ -2,6 +2,7 @@ package pg.lib.common.spring.config;
 
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -21,18 +22,18 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
 import org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import pg.lib.common.spring.auth.HeaderAuthenticationFilter;
-import pg.lib.common.spring.exception.InvalidRequestCustomizerException;
 import pg.lib.common.spring.storage.HeadersHolder;
 import pg.lib.common.spring.storage.ThreadLocalHeadersHolder;
 import pg.lib.common.spring.tracing.LoggingFilter;
 import pg.lib.common.spring.user.Roles;
 
 import java.util.Arrays;
-import java.util.Collection;
 
 /**
  * The type Common security config.
@@ -105,34 +106,33 @@ public class CommonSecurityConfig {
     @Bean
     @Primary
     public SecurityFilterChain securityFilterChain(
-            final @NonNull HttpSecurity http,
-            final @NonNull CorsConfigurationSource corsConfigurationSource,
-            final @NonNull Collection<Customizer<
-                    AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry>> requestPermits,
-            final @NonNull HeaderAuthenticationFilter headerAuthenticationFilter,
-            final @NonNull LoggingFilter loggingFilter) throws Exception {
+            final HttpSecurity http,
+            final CorsConfigurationSource corsConfigurationSource,
+            final ObjectProvider<Customizer<AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry>> requestPermits,
+            final HeaderAuthenticationFilter headerAuthenticationFilter,
+            final LoggingFilter loggingFilter
+    ) throws Exception {
         http
-                .cors(cors -> cors.configurationSource(corsConfigurationSource))
+                .cors(c -> c.configurationSource(corsConfigurationSource))
                 .csrf(AbstractHttpConfigurer::disable)
-
-                .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-
+                .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(loggingFilter, WebAsyncManagerIntegrationFilter.class)
-
-                .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/", "/actuator/**", "/swagger-ui/**", "/swagger-ui.html**", "/v3/api-docs/**").permitAll())
-
                 .addFilterBefore(headerAuthenticationFilter, AnonymousAuthenticationFilter.class);
 
-        requestPermits.forEach(permit -> {
-            try {
-                http.authorizeHttpRequests(permit);
-            } catch (final Exception e) {
-                throw new InvalidRequestCustomizerException(e);
-            }
-        });
+        http.authorizeHttpRequests(registry -> {
+            var publicMatchers = new RequestMatcher[] {
+                    new AntPathRequestMatcher("/"),
+                    new AntPathRequestMatcher("/actuator/**"),
+                    new AntPathRequestMatcher("/swagger-ui/**"),
+                    new AntPathRequestMatcher("/swagger-ui.html**"),
+                    new AntPathRequestMatcher("/v3/api-docs/**")
+            };
+            registry.requestMatchers(publicMatchers).permitAll();
 
+            requestPermits.orderedStream().forEach(c -> c.customize(registry));
+
+            registry.anyRequest().authenticated();
+        });
         return http.build();
     }
 
