@@ -130,8 +130,6 @@ public class CommonSecurityConfig {
             registry.requestMatchers(publicMatchers).permitAll();
 
             requestPermits.orderedStream().forEach(c -> c.customize(registry));
-
-            registry.anyRequest().authenticated();
         });
         return http.build();
     }
