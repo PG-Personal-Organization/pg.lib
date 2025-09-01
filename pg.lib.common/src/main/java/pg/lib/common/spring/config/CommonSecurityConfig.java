@@ -122,9 +122,10 @@ public class CommonSecurityConfig {
         http.authorizeHttpRequests(registry -> {
             var publicMatchers = new RequestMatcher[] {
                     new AntPathRequestMatcher("/"),
+                    new AntPathRequestMatcher("/error"),
                     new AntPathRequestMatcher("/actuator/**"),
+                    new AntPathRequestMatcher("/swagger-ui.html"),
                     new AntPathRequestMatcher("/swagger-ui/**"),
-                    new AntPathRequestMatcher("/swagger-ui.html**"),
                     new AntPathRequestMatcher("/v3/api-docs/**")
             };
             registry.requestMatchers(publicMatchers).permitAll();
