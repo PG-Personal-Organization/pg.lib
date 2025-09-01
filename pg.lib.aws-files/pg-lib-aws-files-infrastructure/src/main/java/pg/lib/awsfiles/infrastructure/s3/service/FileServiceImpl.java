@@ -1,4 +1,4 @@
-package pg.lib.awsfiles.infrastructure.service;
+package pg.lib.awsfiles.infrastructure.s3.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
@@ -8,8 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
-import pg.lib.awsfiles.infrastructure.entity.FileEntity;
-import pg.lib.awsfiles.infrastructure.repository.FileRepository;
+import pg.lib.awsfiles.infrastructure.s3.entity.FileEntity;
+import pg.lib.awsfiles.infrastructure.s3.repository.FileRepository;
 import pg.lib.awsfiles.service.api.AmazonConfig;
 import pg.lib.awsfiles.service.api.FileService;
 import pg.lib.awsfiles.service.api.FileView;

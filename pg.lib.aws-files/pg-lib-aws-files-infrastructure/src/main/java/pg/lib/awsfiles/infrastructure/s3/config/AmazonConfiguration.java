@@ -1,4 +1,4 @@
-package pg.lib.awsfiles.infrastructure.config;
+package pg.lib.awsfiles.infrastructure.s3.config;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -23,9 +23,9 @@ import pg.lib.awsfiles.service.api.AmazonConfig;
         AmazonConfigImpl.class
 })
 @Configuration
-@EntityScan("pg.lib.awsfiles.infrastructure.entity")
-@EnableJpaRepositories("pg.lib.awsfiles.infrastructure.repository")
-@ComponentScan("pg.lib.awsfiles")
+@EntityScan("pg.lib.awsfiles.infrastructure.s3.entity")
+@EnableJpaRepositories("pg.lib.awsfiles.infrastructure.s3.repository")
+@ComponentScan({"pg.lib.awsfiles.infrastructure.s3", "pg.lib.awsfiles.infrastructure.common"})
 public class AmazonConfiguration {
 
     /**

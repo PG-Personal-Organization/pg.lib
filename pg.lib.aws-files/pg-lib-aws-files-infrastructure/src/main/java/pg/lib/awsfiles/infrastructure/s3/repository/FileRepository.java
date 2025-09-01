@@ -1,10 +1,10 @@
-package pg.lib.awsfiles.infrastructure.repository;
+package pg.lib.awsfiles.infrastructure.s3.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import pg.lib.awsfiles.infrastructure.entity.FileEntity;
+import pg.lib.awsfiles.infrastructure.s3.entity.FileEntity;
 
 import java.util.UUID;
 

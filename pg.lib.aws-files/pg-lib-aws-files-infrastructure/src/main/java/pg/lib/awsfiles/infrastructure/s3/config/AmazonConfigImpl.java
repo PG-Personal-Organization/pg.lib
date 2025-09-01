@@ -1,4 +1,4 @@
-package pg.lib.awsfiles.infrastructure.config;
+package pg.lib.awsfiles.infrastructure.s3.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

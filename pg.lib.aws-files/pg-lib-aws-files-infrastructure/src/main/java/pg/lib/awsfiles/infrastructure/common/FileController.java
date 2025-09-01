@@ -1,4 +1,4 @@
-package pg.lib.awsfiles.infrastructure.controller;
+package pg.lib.awsfiles.infrastructure.common;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;

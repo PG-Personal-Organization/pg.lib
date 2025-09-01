@@ -1,4 +1,4 @@
-package pg.lib.awsfiles.infrastructure.controller;
+package pg.lib.awsfiles.infrastructure.common;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

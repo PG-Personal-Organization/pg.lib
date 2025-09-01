@@ -1,4 +1,4 @@
-package pg.lib.awsfiles.infrastructure.config;
+package pg.lib.awsfiles.infrastructure.mock;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -8,7 +8,7 @@ import pg.lib.awsfiles.service.api.FileService;
 import pg.lib.awsfiles.service.api.InMemoryFileService;
 
 @Configuration
-@ComponentScan("pg.lib.awsfiles.infrastructure.controller")
+@ComponentScan("pg.lib.awsfiles.infrastructure.common")
 public class InMemoryMockConfiguration {
     @Bean
     @Primary
