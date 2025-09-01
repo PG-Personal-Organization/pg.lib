@@ -6,6 +6,9 @@ import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.web.server.ResponseStatusException;
 import pg.lib.common.spring.auth.HeaderAuthenticationFilter;
 import pg.lib.common.spring.auth.HeaderNames;
 import pg.lib.cqrs.command.Command;
@@ -123,6 +126,11 @@ public class HttpModuleServiceExecutor implements RemoteCqrsModuleServiceExecuto
     private HttpResponse<String> executeRequest(final HttpRequest request) {
         final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         log.info("Received response: {} {}", response, response.body());
+
+        if (response.statusCode() != HttpStatus.OK.value()) {
+            throw new ResponseStatusException(HttpStatusCode.valueOf(response.statusCode()));
+        }
+
         return response;
     }
 
