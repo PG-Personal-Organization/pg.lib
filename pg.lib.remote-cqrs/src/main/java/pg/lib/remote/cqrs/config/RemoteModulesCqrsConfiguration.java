@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import pg.lib.common.spring.auth.HeaderAuthenticationFilter;
+import pg.lib.common.spring.storage.HeadersHolder;
 import pg.lib.remote.cqrs.executors.RemoteCqrsModuleServiceExecutor;
 import pg.lib.remote.cqrs.http.HttpConfig;
 import pg.lib.remote.cqrs.http.HttpModuleServiceExecutor;
@@ -44,7 +45,8 @@ public class RemoteModulesCqrsConfiguration {
     @Bean
     public RemoteCqrsModuleServiceExecutor remoteServiceExecutor(final HttpConfig httpConfig,
                                                                  final ObjectMapper objectMapper,
-                                                                 final HeaderAuthenticationFilter authenticationFilter) {
-        return new HttpModuleServiceExecutor(authenticationFilter, httpConfig, httpClient(httpConfig), objectMapper);
+                                                                 final HeaderAuthenticationFilter authenticationFilter,
+                                                                 final HeadersHolder headersHolder) {
+        return new HttpModuleServiceExecutor(authenticationFilter, httpConfig, httpClient(httpConfig), objectMapper, headersHolder);
     }
 }

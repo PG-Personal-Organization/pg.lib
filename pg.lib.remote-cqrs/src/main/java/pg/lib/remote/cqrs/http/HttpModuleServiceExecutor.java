@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.web.server.ResponseStatusException;
 import pg.lib.common.spring.auth.HeaderAuthenticationFilter;
 import pg.lib.common.spring.auth.HeaderNames;
+import pg.lib.common.spring.storage.HeadersHolder;
 import pg.lib.cqrs.command.Command;
 import pg.lib.cqrs.query.Query;
 import pg.lib.cqrs.util.ClassUtils;
@@ -23,6 +24,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Objects;
+import java.util.UUID;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -35,6 +37,7 @@ public class HttpModuleServiceExecutor implements RemoteCqrsModuleServiceExecuto
     private final HttpConfig httpConfig;
     private final HttpClient client;
     private final ObjectMapper objectMapper;
+    private final HeadersHolder headersHolder;
 
     /**
      * Instantiates a new Http module service executor.
@@ -46,11 +49,12 @@ public class HttpModuleServiceExecutor implements RemoteCqrsModuleServiceExecuto
      */
     @SuppressWarnings("checkstyle:HiddenField")
     public HttpModuleServiceExecutor(final @Lazy HeaderAuthenticationFilter authenticator, final HttpConfig httpConfig,
-                                     final HttpClient client, final ObjectMapper objectMapper) {
+                                     final HttpClient client, final ObjectMapper objectMapper, final HeadersHolder headersHolder) {
         this.authenticator = authenticator;
         this.httpConfig = httpConfig;
         this.client = client;
         this.objectMapper = objectMapper;
+        this.headersHolder = headersHolder;
     }
 
     @Override
@@ -116,6 +120,7 @@ public class HttpModuleServiceExecutor implements RemoteCqrsModuleServiceExecuto
                 .uri(new URI(moduleUrl + versionUrl + executableName))
                 .header("Content-Type", "application/json; charset=UTF-8")
                 .header(HeaderNames.CONTEXT_TOKEN, authToken)
+                .header(HeaderNames.TRACE_ID, headersHolder.tryToGetHeader(HeaderNames.TRACE_ID).orElse(UUID.randomUUID().toString()))
                 .POST(HttpRequest.BodyPublishers.ofString(objectMapper.writeValueAsString(commandQuery)))
                 .build();
         log.info("Prepared request: {} with body: {} and authToken: {}", request, commandQuery, authToken);
