@@ -149,6 +149,9 @@ public class HttpModuleServiceExecutor implements RemoteCqrsModuleServiceExecuto
 
     @SuppressWarnings("unchecked")
     private <T> T deserializeResult(final String o, final Class<?> clazz, final String contentType) {
+        if (clazz.equals(Void.class)) {
+            return null;
+        }
         if (clazz.equals(String.class) && !contentType.equals(APPLICATION_JSON_VALUE)) {
             return (T) o;
         }
